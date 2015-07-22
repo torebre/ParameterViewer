@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html ng-app="parameterViewerController">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="miniView.css">
+</head>
+
+<body ng-controller="ParameterListCtrl">
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        Search:
+        <input ng-model="query">
+
+        <ul class="parameters">
+          <li class="parameter" draggable="true" ondragstart="drag(event)"
+          ng-attr-id="{{ 'parameter-' + parameter.name}}"
+          ng-repeat="parameter in parameters | filter: query">
+            {{parameter.name}}
+            <p>{{parameter.unit}}</p>
+          </li>
+
+        </ul>
+      </div>
+
+      <div class="col-md-10 parameter-view" id="parameter-view" ondrop="drop(event)" ondragover="allowDrop(event)" tabindex="1">
+        <!--Body content-->
+        <script type="text/javascript">
+
+          var height = 800;
+          var width = 600;
+          var backend = new Backend();
+
+          var parameterViewer = new ParameterViewer(width, height,
+            'parameter-view', backend);
+
+          parameterViewer.addParameterTrack('Test');
+          parameterViewer.setColour('Test', '#D2691E');
+
+          $("#parameter-view").keydown(function(event) {
+            console.log('Key code: ' + event.keyCode);
+            switch (event.keyCode) {
+              case 73:
+                parameterViewer.zoomIn();
+                break;
+
+              case 79:
+                parameterViewer.zoomOut();
+                break;
+
+              case 40:
+                parameterViewer.scrollDown();
+                break;
+
+              case 38:
+                parameterViewer.scrollUp();
+                break;
+
+              default:
+                break;
+            }
+          });
+
+          function allowDrop(ev) {
+            ev.preventDefault();
+          }
+
+          function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+          }
+
+          function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            console.log('Data: ' + data);
+            parameterViewer.addParameterTrack(data.substr(10));
+          }
+
+        </script>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+
+</html>

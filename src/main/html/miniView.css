@@ -1,0 +1,28 @@
+
+h1 {
+  fill:blue;
+  color:blue;
+  stroke:blue;
+}
+
+.col-md-10 {
+  border-style: solid;
+  border-width: 5px;
+}
+
+.parameter-view {
+  float: left;
+}
+
+miniViewWindow {
+  fill:blue;
+  stroke:pink;
+  stroke-width:5;
+  fill-opacity:0.1;
+  stroke-opacity:0.9;
+
+}
+
+.parameters {
+  list-style: none;
+}
