@@ -16,11 +16,28 @@ module.exports = (function() {
     var path = undefined;
     // TODO Is it necessery to have access to both paths?
     var raphaelPath = undefined;
+    var line;
 
 
     function addBoundingBox() {
       var rect = paper.rect(xOffset, yOffset, width, height);
       rect.attr('stroke', this.colour);
+    }
+
+    /**
+      A negative yCoord indicates that the line should
+      not be drawn
+    **/
+    this.drawMarkerLine = function(yCoord) {
+      if(line !== undefined) {
+        line.remove();
+      }
+      if(yCoord < 0) {
+        return;
+      }
+      line = paper.path('M' +xOffset +',' +yCoord +"h" +width);
+      // TODO Colour just for testing
+      line.attr('stroke', 'blue');
     }
 
     this.getModel = function() {

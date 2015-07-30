@@ -11,6 +11,8 @@ h1 {
 }
 
 .parameter-view {
+ /* Note that the resize property is not supported by Internet Explorer */
+  resize: horizontal; 
   float: left;
 }
 

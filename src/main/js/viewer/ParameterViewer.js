@@ -20,7 +20,30 @@ module.exports = (function() {
       this.parameterTrackModels = [];
       this.parameterTracks = [];
       this.parameterTrackHeaders = [];
-      this.paper = Raphael(document.getElementById(parameterViewName), width, height);
+      this.parameterView = document.getElementById(parameterViewName);
+      this.paper = Raphael(this.parameterView, width, height);
+
+      // TODO Is there a better way to make the callback in the event handler
+      // have access to the method that updates the line?
+      this.setupMarkerLine(this.parameterView, this.headerHeight, this);
+    },
+
+    setupMarkerLine: function(parameterView, headerHeight, parameterViewer) {
+      parameterView.onmousemove = function(event) {
+        if(event.offsetY < headerHeight) {
+          return;
+        }
+        parameterViewer.updateMarkerLineForAllParameterTracks(event.offsetY);
+      };
+      parameterView.onmouseleave = function(event) {
+        parameterViewer.updateMarkerLineForAllParameterTracks(-1);
+      }
+    },
+
+    updateMarkerLineForAllParameterTracks: function(yCoord) {
+      for (var i = 0; i < this.parameterTracks.length; ++i) {
+        this.parameterTracks[i].getModel().updateMarkerLine(yCoord);
+      }
     },
 
     addParameterTrack: function(parameter) {
@@ -32,8 +55,8 @@ module.exports = (function() {
         this.height - this.headerHeight,
         this.width, this.dataModel));
 
-        var parameterTrackHeader = new ParameterTrackHeader(this.paper, parameterTrackModel);
-        this.parameterTrackHeaders.push(parameterTrackHeader);
+      var parameterTrackHeader = new ParameterTrackHeader(this.paper, parameterTrackModel);
+      this.parameterTrackHeaders.push(parameterTrackHeader);
 
       this.updateColumnWidths();
       this.render();
@@ -62,7 +85,7 @@ module.exports = (function() {
         this.parameterTracks[i].setXOffset(cumulativeWidth);
         this.parameterTracks[i].setWidth(widthPerTrack);
 
-        console.log('Parameter track headers: ' +this.parameterTrackHeaders[i]);
+        console.log('Parameter track headers: ' + this.parameterTrackHeaders[i]);
 
         this.parameterTrackHeaders[i].setDimensions(cumulativeWidth, 0, widthPerTrack, this.headerHeight);
         cumulativeWidth += widthPerTrack;

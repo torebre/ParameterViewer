@@ -29,6 +29,10 @@ module.exports = (function() {
       };
     };
 
+    this.updateMarkerLine = function(yCoord) {
+      this.parameterTrack.drawMarkerLine(yCoord);
+    };
+
   };
 
   return ParameterTrackModel;

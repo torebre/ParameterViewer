@@ -9,7 +9,7 @@
   <script src="js/controllers.js"></script>
 
   <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" type="text/css" href="miniView.css">
+  <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 
 <body ng-controller="ParameterListCtrl">
@@ -80,7 +80,6 @@
           function drop(ev) {
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
-            console.log('Data: ' + data);
             parameterViewer.addParameterTrack(data.substr(10));
           }
 
