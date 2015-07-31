@@ -22,6 +22,7 @@
 
         <ul class="parameters">
           <li class="parameter" draggable="true" ondragstart="drag(event)"
+          ng-dblclick="parameterDblClick(parameter.name)"
           ng-attr-id="{{ 'parameter-' + parameter.name}}"
           ng-repeat="parameter in parameters | filter: query">
             {{parameter.name}}
@@ -31,15 +32,19 @@
         </ul>
       </div>
 
-      <div class="col-md-10 parameter-view" id="parameter-view" ondrop="drop(event)" ondragover="allowDrop(event)" tabindex="1">
-        <!--Body content-->
+      <div class="col-md-10 parameter-view" id="parameter-view"
+      ondrop="drop(event)"
+      ondragover="allowDrop(event)"
+      ng-keydown="handleKeyDownOnGraph($event)"
+      tabindex="1">
         <script type="text/javascript">
 
           var height = 800;
           var width = 600;
           var backend = new Backend();
 
-          var parameterViewer = new ParameterViewer(width, height,
+          // TODO Making the parameter viewer global
+          parameterViewer = new ParameterViewer(width, height,
             'parameter-view', backend);
 
           parameterViewer.addParameterTrack('Test');

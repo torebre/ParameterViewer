@@ -12,16 +12,22 @@ module.exports = (function() {
 
   ParameterViewer.prototype = {
     init: function(width, height, parameterViewName, backend) {
+      this.parameterView = document.getElementById(parameterViewName);
+      // this.height = this.parameterView.offsetHeight;
+      // this.width = this.parameterView.offsetWidth;
+
       this.height = height;
       this.width = width;
+
+      // console.log("Height: " +this.height);
+
       this.headerHeight = 50;
       this.backend = backend;
       this.dataModel = new DataModel(height, backend);
       this.parameterTrackModels = [];
       this.parameterTracks = [];
       this.parameterTrackHeaders = [];
-      this.parameterView = document.getElementById(parameterViewName);
-      this.paper = Raphael(this.parameterView, width, height);
+      this.paper = Raphael(this.parameterView, this.width, this.height);
 
       // TODO Is there a better way to make the callback in the event handler
       // have access to the method that updates the line?
@@ -47,6 +53,9 @@ module.exports = (function() {
     },
 
     addParameterTrack: function(parameter) {
+
+      console.log('Adding track for: ' +parameter);
+
       var parameterTrackModel = new ParameterTrackModel(parameter, this.dataModel);
       this.parameterTrackModels.push(parameterTrackModel);
 

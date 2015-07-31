@@ -7,4 +7,14 @@ parameterViewerController.controller('ParameterListCtrl', function($scope) {
     {'name': 'Test2',
     'unit': 'testUnit2'}
   ]
+
+  $scope.parameterDblClick = function(parameter) {
+    // TODO This is a hack until I figure out how to structure the application
+    parameterViewer.addParameterTrack(parameter);
+  }
+
+  $scope.handleKeyDownOnGraph = function(event) {
+    console.log('Key down: ' +event);
+  }
+
 });

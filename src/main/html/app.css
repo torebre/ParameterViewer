@@ -12,8 +12,11 @@ h1 {
 
 .parameter-view {
  /* Note that the resize property is not supported by Internet Explorer */
-  resize: horizontal; 
+  resize: horizontal;
   float: left;
+  border-style: solid;
+  /*height: 800;
+  width: 600;*/
 }
 
 miniViewWindow {
@@ -27,4 +30,8 @@ miniViewWindow {
 
 .parameters {
   list-style: none;
+}
+
+.parameter {
+  border-style: solid;
 }
