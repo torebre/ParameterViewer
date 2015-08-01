@@ -8,18 +8,35 @@ var DataModel = require('./DataModel.js');
 module.exports = (function() {
   function ParameterViewer(width, height, parameterViewName, backend) {
     this.init(height, width, parameterViewName, backend);
+
+    var testScope = [];
+
+    this.getDisplayedParameters = function() {
+      var result = [];
+      console.log("Result: " +result);
+      console.log("Test53: " +testScope.length);
+      console.log("Test52: " +this.parameterTracks.length);
+      console.log("Test50: " +this.parameterTrackModels.length);
+      for(var i = 0; i < this.parameterTrackModels.length; ++i) {
+        result.push(this.parameterTrackModels[i].getParameter());
+      }
+      return result;
+    };
   }
+
 
   ParameterViewer.prototype = {
     init: function(width, height, parameterViewName, backend) {
+
+      console.log("Creating parameter viewer");
+
       this.parameterView = document.getElementById(parameterViewName);
       // this.height = this.parameterView.offsetHeight;
       // this.width = this.parameterView.offsetWidth;
+      // console.log('Parameter view: ' +this.parameterView.offsetWidth +', ' +this.parameterView.offsetHeight)
 
       this.height = height;
       this.width = width;
-
-      // console.log("Height: " +this.height);
 
       this.headerHeight = 50;
       this.backend = backend;
@@ -27,12 +44,16 @@ module.exports = (function() {
       this.parameterTrackModels = [];
       this.parameterTracks = [];
       this.parameterTrackHeaders = [];
-      this.paper = Raphael(this.parameterView, this.width, this.height);
+
+      this.papers = [];
+
+      // this.paper = Raphael(this.parameterView, this.width, this.height);
 
       // TODO Is there a better way to make the callback in the event handler
       // have access to the method that updates the line?
       this.setupMarkerLine(this.parameterView, this.headerHeight, this);
     },
+
 
     setupMarkerLine: function(parameterView, headerHeight, parameterViewer) {
       parameterView.onmousemove = function(event) {
@@ -52,22 +73,31 @@ module.exports = (function() {
       }
     },
 
-    addParameterTrack: function(parameter) {
+    addParameterTrack: function(parameter, parameterViewName) {
 
       console.log('Adding track for: ' +parameter);
 
+      if(this.papers.parameterViewName == undefined) {
+        // var width = this.parameterTracks[parameterTracks.length - 1].getWidth();
+        this.papers.parameterViewName = Raphael(this.parameterView, this.width, this.height);
+      }
+
+      var paper = this.papers.parameterViewName;
       var parameterTrackModel = new ParameterTrackModel(parameter, this.dataModel);
-      this.parameterTrackModels.push(parameterTrackModel);
+      this.parameterTrackModels.push(
+        parameterTrackModel
+      );
 
       // TODO Height and width need to be less to make room for other components
-      this.parameterTracks.push(new ParameterTrack(parameterTrackModel, this.paper, 0, this.headerHeight,
+      this.parameterTracks.push(new ParameterTrack(parameterTrackModel, paper, 0, this.headerHeight,
         this.height - this.headerHeight,
         this.width, this.dataModel));
 
-      var parameterTrackHeader = new ParameterTrackHeader(this.paper, parameterTrackModel);
+      var parameterTrackHeader = new ParameterTrackHeader(paper, parameterTrackModel);
       this.parameterTrackHeaders.push(parameterTrackHeader);
 
       this.updateColumnWidths();
+
       this.render();
     },
 
