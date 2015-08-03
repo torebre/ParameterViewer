@@ -7,8 +7,7 @@ var DataModel = require('./DataModel.js');
 
 module.exports = (function() {
   function ParameterViewer(width, height, parameterViewName, backend) {
-
-    parameterView = document.getElementById(parameterViewName);
+    // parameterView = document.getElementById(parameterViewName);
     // this.height = this.parameterView.offsetHeight;
     // this.width = this.parameterView.offsetWidth;
     // console.log('Parameter view: ' +this.parameterView.offsetWidth +', ' +this.parameterView.offsetHeight)
@@ -38,6 +37,12 @@ module.exports = (function() {
       for (var i = 0; i < parameterTracks.length; ++i) {
         parameterTracks[i].getModel().updateMarkerLine(yCoord);
       }
+    };
+
+    this.createPaper = function() {
+    parameterView = document.getElementById(parameterViewName);
+
+    this.paper = Raphael(this.parameterView, this.width, this.height);
     };
 
     this.addParameterTrack = function(parameter, parameterViewName) {
