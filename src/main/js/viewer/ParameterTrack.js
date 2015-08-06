@@ -86,6 +86,7 @@ module.exports = (function() {
           skipRows++;
         }
       }
+      // console.log('SVG path: ' +svgPath);
       return svgPath;
     };
   }

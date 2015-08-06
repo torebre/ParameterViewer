@@ -10,7 +10,6 @@ angular.module('parameterViewerModule')
       }]
 
       $scope.parameterDblClick = function(parameter) {
-        // TODO This is a hack until I figure out how to structure the application
         parameterViewer.addParameterTrack(parameter);
       }
 

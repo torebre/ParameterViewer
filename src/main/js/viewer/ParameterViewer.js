@@ -6,32 +6,23 @@ var DataModel = require('./DataModel.js');
 
 
 module.exports = (function() {
-  function ParameterViewer(width, height, parameterViewName, backend) {
-    // parameterView = document.getElementById(parameterViewName);
-    // this.height = this.parameterView.offsetHeight;
-    // this.width = this.parameterView.offsetWidth;
-    // console.log('Parameter view: ' +this.parameterView.offsetWidth +', ' +this.parameterView.offsetHeight)
-
-    headerHeight = 50;
-    dataModel = new DataModel(height, backend);
+  function ParameterViewer(colWidth, colHeight, backend) {
+    dataModel = new DataModel(colHeight, backend);
     parameterTrackModels = [];
     parameterTracks = [];
     parameterTrackHeaders = [];
-
     papers = [];
 
-    // this.paper = Raphael(this.parameterView, this.width, this.height);
-
-    parameterView.onmousemove = function(event) {
-      if (event.offsetY < headerHeight) {
-        return;
-      }
-      updateMarkerLineForAllParameterTracks(event.offsetY);
-    };
-
-    parameterView.onmouseleave = function(event) {
-      updateMarkerLineForAllParameterTracks(-1);
-    }
+    // parameterView.onmousemove = function(event) {
+    //   if (event.offsetY < headerHeight) {
+    //     return;
+    //   }
+    //   updateMarkerLineForAllParameterTracks(event.offsetY);
+    // };
+    //
+    // parameterView.onmouseleave = function(event) {
+    //   updateMarkerLineForAllParameterTracks(-1);
+    // }
 
     function updateMarkerLineForAllParameterTracks(yCoord) {
       for (var i = 0; i < parameterTracks.length; ++i) {
@@ -39,38 +30,47 @@ module.exports = (function() {
       }
     };
 
-    this.createPaper = function() {
-    parameterView = document.getElementById(parameterViewName);
+    this.removeParameter = function(parameter) {
+      // TODO Remove from viewer
+      for(var i = 0; i < parameterTrackModels.length; ++i) {
+        if(parameterTrackModels[i].getParameter() == parameterName) {
+          parameterTrackModel = parameterTrackModels[i];
+          break;
+        }
+      }
+    }
 
-    this.paper = Raphael(this.parameterView, this.width, this.height);
-    };
-
-    this.addParameterTrack = function(parameter, parameterViewName) {
-
-      console.log('Adding track for: ' + parameter);
-
-      if (papers.parameterViewName == undefined) {
-        // var width = this.parameterTracks[parameterTracks.length - 1].getWidth();
-        papers.parameterViewName = Raphael(parameterView, width, height);
+    this.drawParameter = function(trackContainerElement, parameterName) {
+      var parameterTrackModel = parameterTrackModels[parameterName];
+      for(var i = 0; i < parameterTrackModels.length; ++i) {
+        if(parameterTrackModels[i].getParameter() == parameterName) {
+          parameterTrackModel = parameterTrackModels[i];
+          break;
+        }
       }
 
-      var paper = papers.parameterViewName;
-      var parameterTrackModel = new ParameterTrackModel(parameter, dataModel);
-      parameterTrackModels.push(
-        parameterTrackModel
-      );
-
-      // TODO Height and width need to be less to make room for other components
-      parameterTracks.push(new ParameterTrack(parameterTrackModel, paper, 0, headerHeight,
-        height - headerHeight,
-        width, dataModel));
+      if (papers[parameterName] == undefined) {
+        papers[parameterName] = Raphael(trackContainerElement, colWidth, colHeight);
+      }
+      var paper = Raphael(trackContainerElement, colWidth, colHeight);
+      // TODO Need to figure out the life cycle of the papers, and then
+      // delete the old parameter tracks attached to the old papers
+      parameterTracks.push(new ParameterTrack(parameterTrackModel, paper, 0, 0,
+        colHeight,
+        colWidth, dataModel));
 
       var parameterTrackHeader = new ParameterTrackHeader(paper, parameterTrackModel);
       parameterTrackHeaders.push(parameterTrackHeader);
 
-      updateColumnWidths();
-
       render();
+    };
+
+    this.addParameterTrack = function(parameter) {
+      // TODO Use a map instead
+      var parameterTrackModel = new ParameterTrackModel(parameter, dataModel);
+      parameterTrackModels.push(
+        parameterTrackModel
+      );
     };
 
     this.setColour = function(parameter, colour) {
@@ -98,7 +98,7 @@ module.exports = (function() {
 
         console.log('Parameter track headers: ' + parameterTrackHeaders[i]);
 
-        parameterTrackHeaders[i].setDimensions(cumulativeWidth, 0, widthPerTrack, headerHeight);
+        parameterTrackHeaders[i].setDimensions(cumulativeWidth, 0, widthPerTrack, 0);
         cumulativeWidth += widthPerTrack;
       }
     };

@@ -13,6 +13,7 @@
   <script src="js/controllers/ParameterListController.js"></script>
   <script src="js/services/BackendService.js"></script>
   <script src="js/services/ParameterViewerService.js"></script>
+  <script src="js/directives/ParameterTrackDirective.js"></script>
 
   <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="app.css">
@@ -55,16 +56,20 @@
               });
             }
           </script>
+          <table>
+            <tr>
+              <td ng-repeat="parameter in displayedParameters" ng-dblclick="headerDblClick(parameter)">
+                {{ parameter }}
+                </td>
+            </tr>
+            <tr>
+              <td ng-repeat="parameter in displayedParameters">
+                <div parameter-track parameter="{{ parameter }}">
+                </div>
+              </td>
+            </tr>
+          </table>
         </div>
-        Test
-        <table>
-          <tr>
-            <td ng-repeat="parameter in displayedParameters">{{ parameter }}</td>
-          </tr>
-          <tr>
-            <td ng-repeat="parameter in displayedParameters">{{ parameter }}</td>
-          </tr>
-        </table>
       </div>
     </div>
   </div>

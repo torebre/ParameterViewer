@@ -7,7 +7,16 @@ angular.module('parameterViewerModule')
         parameterViewer.addParameterTrack(parameter);
       };
 
-// TODO Could avoid using object equality in the following
+      $scope.drawParameter = function(parameter, containerId) {
+        parameterViewer.drawParameter(parameter, containerId);
+      };
+
+      $scope.headerDblClick = function(parameter) {
+        console.log('Removing parameter: ' +parameter);
+        parameterViewer.removeParameter(parameter);
+      }
+
+      // TODO Could avoid using object equality in the following
       $scope.$watch(parameterViewer.getDisplayedParameters, function() {
         $scope.displayedParameters = parameterViewer.getDisplayedParameters();
       }, true);
