@@ -31,23 +31,13 @@ module.exports = (function() {
     };
 
     this.removeParameter = function(parameter) {
-      // TODO Remove from viewer
-      for(var i = 0; i < parameterTrackModels.length; ++i) {
-        if(parameterTrackModels[i].getParameter() == parameterName) {
-          parameterTrackModel = parameterTrackModels[i];
-          break;
-        }
-      }
+      delete parameterTrackModels[parameter];
     }
 
     this.drawParameter = function(trackContainerElement, parameterName) {
       var parameterTrackModel = parameterTrackModels[parameterName];
-      for(var i = 0; i < parameterTrackModels.length; ++i) {
-        if(parameterTrackModels[i].getParameter() == parameterName) {
-          parameterTrackModel = parameterTrackModels[i];
-          break;
-        }
-      }
+
+      console.log('Model: ' +parameterTrackModel);
 
       if (papers[parameterName] == undefined) {
         papers[parameterName] = Raphael(trackContainerElement, colWidth, colHeight);
@@ -55,22 +45,19 @@ module.exports = (function() {
       var paper = Raphael(trackContainerElement, colWidth, colHeight);
       // TODO Need to figure out the life cycle of the papers, and then
       // delete the old parameter tracks attached to the old papers
-      parameterTracks.push(new ParameterTrack(parameterTrackModel, paper, 0, 0,
+      parameterTracks[parameterName] = new ParameterTrack(parameterTrackModel, paper, 0, 0,
         colHeight,
-        colWidth, dataModel));
+        colWidth, dataModel);
 
-      var parameterTrackHeader = new ParameterTrackHeader(paper, parameterTrackModel);
-      parameterTrackHeaders.push(parameterTrackHeader);
+      parameterTrackHeaders[parameterName] = new ParameterTrackHeader(paper, parameterTrackModel);
 
       render();
     };
 
-    this.addParameterTrack = function(parameter) {
-      // TODO Use a map instead
-      var parameterTrackModel = new ParameterTrackModel(parameter, dataModel);
-      parameterTrackModels.push(
-        parameterTrackModel
-      );
+    this.addParameterTrack = function(parameterName) {
+      console.log('Adding track: ' +parameterName +'. Length: ' +parameterTrackModels.length);
+      parameterTrackModels[parameterName] = new ParameterTrackModel(parameterName, dataModel);
+      console.log('Length after update: ' +parameterTrackModels.length);
     };
 
     this.setColour = function(parameter, colour) {
@@ -140,8 +127,8 @@ module.exports = (function() {
 
     this.getDisplayedParameters = function() {
       var result = [];
-      for (var i = 0; i < parameterTrackModels.length; ++i) {
-        result.push(parameterTrackModels[i].getParameter());
+      for(var key in parameterTrackModels) {
+        result.push(key);
       }
       return result;
     };

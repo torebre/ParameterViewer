@@ -1,18 +1,24 @@
 angular.module('parameterViewerModule')
-  .controller('parameterViewController', ['$scope', 'parameterViewer',
-    function($scope, parameterViewer) {
+  .controller('parameterViewController', ['$scope', '$log', 'parameterViewer',
+    function($scope, $log, parameterViewer) {
       $scope.displayedParameters = [];
 
+      $scope.getElement = function() {
+        return $element;
+      }
+
       $scope.addParameter = function(parameter) {
+        $log.debug('Adding parameter: ' +parameter);
         parameterViewer.addParameterTrack(parameter);
       };
 
       $scope.drawParameter = function(parameter, containerId) {
+        $log.debug('Drawing parameter: ' +parameter);
         parameterViewer.drawParameter(parameter, containerId);
       };
 
       $scope.headerDblClick = function(parameter) {
-        console.log('Removing parameter: ' +parameter);
+        $log.debug('Removing parameter: ' +parameter);
         parameterViewer.removeParameter(parameter);
       }
 
@@ -22,7 +28,7 @@ angular.module('parameterViewerModule')
       }, true);
 
       $scope.handleKeyDownOnGraph = function(event) {
-        console.log('Key down: ' + event);
+        $log.debug('Key down: ' + event);
 
         switch (event.keyCode) {
           case 73:
