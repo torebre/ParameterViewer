@@ -41,6 +41,11 @@ module.exports = function(grunt) {
       files: ['src/main/html/**/*.html']
     },
 
+    css: {
+      tasks: ['copy'],
+      files: ['src/main/html/**/*.css']
+    },
+
     ngApp: {
       tasks: ['copy'],
       files: ['src/main/js/ngApp/**/*.js']
