@@ -67,6 +67,7 @@ angular.module('parameterViewerModule')
 
             $timeout(function() {
               moveResizeMarkers(element);
+              parameterViewer.redraw();
             });
           });
         }

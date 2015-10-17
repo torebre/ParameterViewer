@@ -49,12 +49,15 @@ module.exports = (function() {
     }
 
     this.render = function() {
+      console.log('Test20');
       if(raphaelPath !== undefined) {
         raphaelPath.remove();
       }
+      console.log('Test21')
       addBoundingBox();
       var coordinates = parameterTrackModel.getParameterPath();
       path = generateFullSvgPath(coordinates);
+      console.log('Test22');
       raphaelPath = this.paper.path(path);
       raphaelPath.attr('stroke', this.colour);
     };

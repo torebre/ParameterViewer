@@ -13,17 +13,6 @@ module.exports = (function() {
     parameterTrackHeaders = [];
     papers = [];
 
-    // parameterView.onmousemove = function(event) {
-    //   if (event.offsetY < headerHeight) {
-    //     return;
-    //   }
-    //   updateMarkerLineForAllParameterTracks(event.offsetY);
-    // };
-    //
-    // parameterView.onmouseleave = function(event) {
-    //   updateMarkerLineForAllParameterTracks(-1);
-    // }
-
     function updateMarkerLineForAllParameterTracks(yCoord) {
       for (var i = 0; i < parameterTracks.length; ++i) {
         parameterTracks[i].getModel().updateMarkerLine(yCoord);
@@ -69,6 +58,13 @@ module.exports = (function() {
       }
     };
 
+
+    this.redraw = function() {
+      console.log('Redrawing');
+      // TODO If nothing else needs to be done, render can be made public
+      render();
+    };
+
     function updateColumnWidths() {
       // TODO For now just give all the columns the same width
       if (parameterTracks.length == 0) {
@@ -92,10 +88,16 @@ module.exports = (function() {
 
     function render() {
       // this.paper.clear();
-      for (var i = 0; i < parameterTracks.length; ++i) {
-        parameterTracks[i].render();
-        parameterTrackHeaders[i].render();
-      }
+      console.log('Number of parameter tracks: ' +parameterTracks.length);
+
+      for(var key in parameterTrackModels) {
+        parameterTrackModels[key].render();
+
+    }
+      // for (var i = 0; i < parameterTracks.length; ++i) {
+      //   parameterTracks[i].render();
+      //   parameterTrackHeaders[i].render();
+      // }
     };
 
     this.calculateLayout = function() {

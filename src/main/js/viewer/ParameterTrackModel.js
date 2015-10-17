@@ -14,6 +14,14 @@ module.exports = (function() {
       this.parameterTrack.render();
     };
 
+    this.layoutChanged = function() {
+      this.parameterTrack.render();
+    };
+
+    this.render = function() {
+      this.parameterTrack.render();
+    };
+
     this.getParameter = function() {
       return this.parameter;
     };
