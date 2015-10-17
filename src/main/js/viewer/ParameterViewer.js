@@ -12,6 +12,8 @@ module.exports = (function() {
     parameterTracks = [];
     parameterTrackHeaders = [];
     papers = [];
+    indexTrackMap = [];
+    numberOfParameters = 0;
 
     function updateMarkerLineForAllParameterTracks(yCoord) {
       for (var i = 0; i < parameterTracks.length; ++i) {
@@ -37,7 +39,8 @@ module.exports = (function() {
       parameterTracks[parameterName] = new ParameterTrack(parameterTrackModel, paper, 0, 0,
         colHeight,
         colWidth, dataModel);
-
+        indexTrackMap[numberOfParameters] = parameterName;
+++numberOfParameters;
       parameterTrackHeaders[parameterName] = new ParameterTrackHeader(paper, parameterTrackModel);
 
       render();
@@ -48,6 +51,17 @@ module.exports = (function() {
       parameterTrackModels[parameterName] = new ParameterTrackModel(parameterName, dataModel);
       console.log('Length after update: ' +parameterTrackModels.length);
     };
+
+    this.setColumnWidths = function(widths) {
+      for(counter = 0; counter < numberOfParameters; ++counter) {
+        var key = indexTrackMap[counter];
+        parameterTrackHeaders[key].setWidth(widths[counter]);
+        parameterTracks[key].setWidth(widths[counter]);
+      }
+      render();
+    };
+
+
 
     this.setColour = function(parameter, colour) {
       for (var i = 0; i < parameterTracks.length; ++i) {
@@ -89,6 +103,7 @@ module.exports = (function() {
     function render() {
       // this.paper.clear();
       console.log('Number of parameter tracks: ' +parameterTracks.length);
+      console.log('Number of parameter track models: ' +parameterTrackModels.length);
 
       for(var key in parameterTrackModels) {
         parameterTrackModels[key].render();

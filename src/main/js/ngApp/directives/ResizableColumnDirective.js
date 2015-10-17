@@ -67,7 +67,14 @@ angular.module('parameterViewerModule')
 
             $timeout(function() {
               moveResizeMarkers(element);
-              parameterViewer.redraw();
+
+              var tableElement = parameterTableController.getParameterTableElement();
+              var newWidths = [];
+              tableElement.find('th').each(function(index, el) {
+                var myElement = angular.element(el);
+                newWidths.push(myElement.width());
+              });
+              parameterViewer.setColumnWidths(newWidths);
             });
           });
         }

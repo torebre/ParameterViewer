@@ -35,7 +35,11 @@ module.exports = (function() {
       myYOffset = yOffset;
       myWidth = width;
       myHeight = height;
-    }
+    };
+
+    this.setWidth = function(width) {
+      myWidth = width;
+    };
 
   }
 
