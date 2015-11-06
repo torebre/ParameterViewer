@@ -16,12 +16,13 @@ module.exports = (function() {
     var path = undefined;
     // TODO Is it necessery to have access to both paths?
     var raphaelPath = undefined;
+    var boundingBox = undefined;
     var line;
 
 
     function addBoundingBox() {
-      var rect = paper.rect(xOffset, yOffset, width, height);
-      rect.attr('stroke', this.colour);
+      boundingBox = paper.rect(xOffset, yOffset, width, height);
+      boundingBox.attr('stroke', this.colour);
     }
 
     /**
@@ -49,21 +50,26 @@ module.exports = (function() {
     }
 
     this.render = function() {
-      console.log('Test20');
       if(raphaelPath !== undefined) {
         raphaelPath.remove();
+        boundingBox.remove();
       }
-      console.log('Test21')
       addBoundingBox();
       var coordinates = parameterTrackModel.getParameterPath();
       path = generateFullSvgPath(coordinates);
-      console.log('Test22');
       raphaelPath = this.paper.path(path);
       raphaelPath.attr('stroke', this.colour);
     };
 
-    this.setWidth = function(width2) {
-      width = width2;
+    this.setHeight = function(newHeight) {
+      console.log("Setting height for track: " +newHeight);
+      paper.setSize(width, newHeight);
+      height = newHeight;
+    }
+
+    this.setWidth = function(newWidth) {
+      paper.setSize(newWidth, height);
+      width = newWidth;
     };
 
     this.setXOffset = function(xOffset2) {

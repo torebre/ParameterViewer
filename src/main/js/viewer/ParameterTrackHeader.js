@@ -41,6 +41,10 @@ module.exports = (function() {
       myWidth = width;
     };
 
+    this.getHeight = function() {
+      return myHeight;
+    };
+
   }
 
   return ParameterTrackHeader;

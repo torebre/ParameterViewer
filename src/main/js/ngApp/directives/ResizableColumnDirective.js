@@ -72,9 +72,21 @@ angular.module('parameterViewerModule')
               var newWidths = [];
               tableElement.find('th').each(function(index, el) {
                 var myElement = angular.element(el);
+
+                console.log("Table header width: " +myElement.width());
+
                 newWidths.push(myElement.width());
               });
               parameterViewer.setColumnWidths(newWidths);
+
+              console.log("Column heights:")
+              tableElement.find('td').each(function(index, el) {
+                var myElement = angular.element(el);
+                console.log("Column height: " +myElement.height());
+
+              });
+
+
             });
           });
         }

@@ -28,7 +28,7 @@ module.exports = (function() {
     this.drawParameter = function(trackContainerElement, parameterName) {
       var parameterTrackModel = parameterTrackModels[parameterName];
 
-      console.log('Model: ' +parameterTrackModel);
+      console.log('Model: ' + parameterTrackModel);
 
       if (papers[parameterName] == undefined) {
         papers[parameterName] = Raphael(trackContainerElement, colWidth, colHeight);
@@ -39,29 +39,34 @@ module.exports = (function() {
       parameterTracks[parameterName] = new ParameterTrack(parameterTrackModel, paper, 0, 0,
         colHeight,
         colWidth, dataModel);
-        indexTrackMap[numberOfParameters] = parameterName;
-++numberOfParameters;
+      indexTrackMap[numberOfParameters] = parameterName;
+      ++numberOfParameters;
       parameterTrackHeaders[parameterName] = new ParameterTrackHeader(paper, parameterTrackModel);
 
       render();
     };
 
     this.addParameterTrack = function(parameterName) {
-      console.log('Adding track: ' +parameterName +'. Length: ' +parameterTrackModels.length);
+      console.log('Adding track: ' + parameterName + '. Length: ' + parameterTrackModels.length);
       parameterTrackModels[parameterName] = new ParameterTrackModel(parameterName, dataModel);
-      console.log('Length after update: ' +parameterTrackModels.length);
+      console.log('Length after update: ' + parameterTrackModels.length);
     };
 
     this.setColumnWidths = function(widths) {
-      for(counter = 0; counter < numberOfParameters; ++counter) {
+      for (counter = 0; counter < numberOfParameters; ++counter) {
         var key = indexTrackMap[counter];
-        parameterTrackHeaders[key].setWidth(widths[counter]);
         parameterTracks[key].setWidth(widths[counter]);
       }
       render();
     };
 
-
+    this.setColumnHeights = function(heights) {
+      for (counter = 0; counter < numberOfParameters; ++counter) {
+        var key = indexTrackMap[counter];
+        parameterTracks[key].setHeight(heights[counter]);
+      }
+      render();
+    };
 
     this.setColour = function(parameter, colour) {
       for (var i = 0; i < parameterTracks.length; ++i) {
@@ -93,7 +98,6 @@ module.exports = (function() {
         parameterTracks[i].setXOffset(cumulativeWidth);
         parameterTracks[i].setWidth(widthPerTrack);
 
-        console.log('Parameter track headers: ' + parameterTrackHeaders[i]);
 
         parameterTrackHeaders[i].setDimensions(cumulativeWidth, 0, widthPerTrack, 0);
         cumulativeWidth += widthPerTrack;
@@ -101,18 +105,12 @@ module.exports = (function() {
     };
 
     function render() {
-      // this.paper.clear();
-      console.log('Number of parameter tracks: ' +parameterTracks.length);
-      console.log('Number of parameter track models: ' +parameterTrackModels.length);
+      console.log('Number of parameter tracks: ' + parameterTracks.length);
+      console.log('Number of parameter track models: ' + parameterTrackModels.length);
 
-      for(var key in parameterTrackModels) {
+      for (var key in parameterTrackModels) {
         parameterTrackModels[key].render();
-
-    }
-      // for (var i = 0; i < parameterTracks.length; ++i) {
-      //   parameterTracks[i].render();
-      //   parameterTrackHeaders[i].render();
-      // }
+      }
     };
 
     this.calculateLayout = function() {
@@ -142,9 +140,10 @@ module.exports = (function() {
       dataModel.scrollUp();
     };
 
+    // This method is watched by ParameterViewController
     this.getDisplayedParameters = function() {
       var result = [];
-      for(var key in parameterTrackModels) {
+      for (var key in parameterTrackModels) {
         result.push(key);
       }
       return result;
