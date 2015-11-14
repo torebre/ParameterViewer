@@ -1,4 +1,15 @@
 angular.module('parameterViewerModule')
+.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/', {
+        templateUrl: 'partials/Viewer.html',
+        controller: 'parameterViewController'
+      }).
+      otherwise({
+        redirectTo: '/'
+      });
+  }])
   .controller('parameterViewController', ['$scope', '$log', 'parameterViewer',
     function($scope, $log, parameterViewer) {
       $scope.displayedParameters = [];
