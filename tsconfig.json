@@ -1,0 +1,20 @@
+//"outDir": "build/ts_out/parameterViewer.js",
+{
+  "compilerOptions": {
+    "module": "system",
+    "moduleResolution": "node",
+    "target": "ES5",
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outDir": "build/ts_out",
+    "sourceMap": true
+  },
+  "exclude": [
+    "bower_components",
+    "build",
+    "main",
+    "node_modules"
+  ]
+}

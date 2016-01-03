@@ -1,0 +1,43 @@
+<div class="col-md-10 parameter-view" ng-controller="parameterViewController" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <h2>Test2</h2>
+    <div id="parameter-view" ng-keydown="handleKeyDownOnGraph($event)" tabindex="1">
+        <script type="text/javascript">
+            // TODO Instead make use of drag and drop in AngularJs
+            function allowDrop(ev) {
+                ev.preventDefault();
+            }
+
+            function drag(ev) {
+                ev.dataTransfer.setData("text", ev.target.id);
+            }
+
+            function drop(ev) {
+                ev.preventDefault();
+                var data = ev.dataTransfer.getData("text");
+                var parameterViewer = angular.element($("#parameter-view")).scope();
+                parameterViewer.$apply(function() {
+                    parameterViewer.addParameter(data.substr(10));
+                });
+            }
+
+        </script>
+        <table id="parameter-view-table" parameter-table>
+            <thead>
+            <tr>
+                <th col-resizeable ng-repeat="parameter in displayedParameters" ng-dblclick="headerDblClick(parameter)">
+                    Parameter: {{ parameter }}
+                </th>
+            <tr>
+            </thead>
+            <tr>
+                <td ng-repeat="parameter in displayedParameters">
+                    <div parameter-track parameter="{{ parameter }}">
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</div>
+</div>
+
