@@ -1,24 +1,20 @@
-//var Raphael = require('raphael');
-//var ParameterTrackModel = require('./ParameterTrackModel.js');
-//var ParameterTrack = require('./ParameterTrack.js');
-//var ParameterTrackHeader = require('./ParameterTrackHeader.js');
-//var DataModel = require('./DataModel.js');
-
-
 import {Component} from "angular2/core";
+import IBackend = Backend.IBackend;
 
 
 @Component({
-    selector: 'parameterViewer',
-    templateUrl: 'parameterTable.html'
+    selector: 'parameter-table',
+    templateUrl: '../templates/parameterTable.html'
 })
 class ParameterTable {
-    private dataModel: IDataModel;
+    private dataModel: DataModel;
     private parameterTrackModels:Array<IParameterTrackModel> = [];
+    private parameterTracks:Array<ParameterTrack> = []
+
 
 
     constructor(colWidth: number, colHeight: number, backend: IBackend) {
-        dataModel = new DataModel(colHeight, backend);
+        this.dataModel = new DataModel(colHeight, backend);
         //parameterTrackModels = [];
         parameterTracks = [];
         parameterTrackHeaders = [];
@@ -27,14 +23,14 @@ class ParameterTable {
         numberOfParameters = 0;
     }
 
-    updateMarkerLineForAllParameterTracks(yCoord: number) {
+    updateMarkerLineForAllParameterTracks(yCoord: number):void {
         for (var i = 0; i < parameterTracks.length; ++i) {
             parameterTracks[i].getModel().updateMarkerLine(yCoord);
         }
     }
 
-    removeParameter(parameter: number) {
-        delete parameterTrackModels[parameter];
+    removeParameter(parameter: number):void {
+        delete this.parameterTrackModels[parameter];
     }
 
     drawParameter(trackContainerElement, parameterName: number) {
@@ -73,7 +69,7 @@ class ParameterTable {
     }
 
     setColumnHeights(heights: Array<number>) {
-        for (counter = 0; counter < numberOfParameters; ++counter) {
+        for (let counter = 0; counter < numberOfParameters; ++counter) {
             var key = indexTrackMap[counter];
             parameterTracks[key].setHeight(heights[counter]);
         }
@@ -136,28 +132,48 @@ class ParameterTable {
         return widths;
     }
 
-    zoomIn() {
+    zoomIn(): void {
         dataModel.zoomIn();
     }
 
-    zoomOut() {
+    zoomOut(): void {
         dataModel.zoomOut();
     }
 
-    scrollDown() {
+    scrollDown(): void {
         dataModel.scrollDown();
     }
 
-    scrollUp() {
+    scrollUp(): void {
         dataModel.scrollUp();
     }
 
-    // This method is watched by ParameterViewController
-    getDisplayedParameters() {
+    getDisplayedParameters(): void {
         var result = [];
         for (var key in parameterTrackModels) {
             result.push(key);
         }
         return result;
     };
+
+
+//    allowDrop(ev): void {
+//    ev.preventDefault();
+//}
+//
+//    function drag(ev) {
+//    ev.dataTransfer.setData("text", ev.target.id);
+//}
+
+
+    onDrop(ev: DragEvent): void {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    var parameterViewer = angular.element($("#parameter-view")).scope();
+    parameterViewer.$apply(function () {
+        parameterViewer.addParameter(data.substr(10));
+    })
+}
+
+
 }

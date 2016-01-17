@@ -1,6 +1,3 @@
-//import IDataModelListener = require('IDataModelListener');
-
-
 /*
  Interface between UI components and data. This class
  has the following responsibilities:
@@ -8,7 +5,9 @@
  - Provide functions that calculate a summary of a range
  - of data values in a pixel.
  */
-class DataModel implements IDataModel {
+import IBackend = Backend.IBackend;
+
+class DataModel {
     public static get ZOOM_LEVEL_MAX():number {
         return 10;
     }
@@ -25,8 +24,11 @@ class DataModel implements IDataModel {
     private range:number;
     private startIndex:number;
     private stopIndex:number;
+    private scrollJump:number;
 
     private listeners:IDataModelListener[];
+
+    private width:number;
 
 
     // The index needs to know the height (number of pixels)
@@ -40,60 +42,57 @@ class DataModel implements IDataModel {
         this.startIndex = undefined;
         this.stopIndex = undefined;
 
-
-        // this.rangeStart = backend.getRangeStart();
         console.log('Backend start: ' + backend.getRangeStart() + '. Backend end: ' + backend.getRangeEnd());
         this.setRange(backend.getRangeStart(), backend.getRangeEnd());
         console.log('Start index: ' + this.startIndex + '. Stop index: ' + this.stopIndex);
 
         this.scrollJump = Math.floor((this.stopIndex - this.startIndex) / 10);
-
         this.calculateVisiblePoints();
-
     }
 
 
-    addListener(listener:IDataModelListener) {
+    addListener(listener:IDataModelListener):void {
         this.listeners.push(listener);
     }
 
-    private notifyListenersRangeChanged() {
+    private notifyListenersRangeChanged():void {
         for (var i = 0; i < this.listeners.length; ++i) {
             this.listeners[i].rangeChanged();
         }
     }
 
-    scaleParameter(parameter:number, value:number) {
+    scaleParameter(parameter:number, value:number):number {
         // TODO Scale per parameter
         // TODO Check if negative values are handled correctly
 
         //console.log("Width2: " +this.width +". Value: " +value +". Parameter min: " +this.parameterMin +". Parameter max: " +this.parameterMax);
 
-        return (value - this.parameterMin) / (this.parameterMax - this.parameterMin) * this.width;
+        return (value - this.getMin(parameter)) / (this.getMax(parameter) - this.getMin(parameter)) * this.width;
     }
 
     // Calculates the minimum, maximum and average for the
     // parameter within the range [start, stop]. The start
     // and stop values are integers that represent a range
     // of index points
-    getValue(parameter:number, start:number, stop:number) {
+    getValue(parameter:number, start:number, stop:number):ValueSummary {
         return this.backend.getValue(parameter, start, stop);
     }
 
-    getScaledValue(parameter:number, start:number, stop:number) {
+    getScaledValue(parameter:number, start:number, stop:number):ValueSummary {
         var valueSummary = this.getValue(parameter, start, stop);
-        return {
-            average: this.scaleParameter(parameter, valueSummary.average),
-            min: this.scaleParameter(parameter, valueSummary.min),
-            max: this.scaleParameter(parameter, valueSummary.max)
-        };
+        return new ValueSummary(
+            this.scaleParameter(parameter, valueSummary.min),
+            this.scaleParameter(parameter, valueSummary.max),
+            this.scaleParameter(parameter, valueSummary.average)
+        );
     }
 
-    getValuesForParameter(parameter:number) {
+    getValuesForParameter(parameter:number):Array<ValueSummary> {
         var currentRange = this.getRange();
 
-        var parameterValues = [];
-        for (row = 0; row < currentRange.length; ++row) {
+        var parameterValues:Array<ValueSummary> = [];
+        // TODO Figure out what let does
+        for (let row = 0; row < currentRange.length; ++row) {
             // TODO Use scaled values when finished debugging
             // parameterValues.push(this.getScaledValue(parameter, currentRange[row][0], currentRange[row][1]);
 
@@ -102,43 +101,43 @@ class DataModel implements IDataModel {
         return parameterValues;
     }
 
-    setDimensions(width:number, height:number) {
+    setDimensions(width:number, height:number):void {
         this.width = width;
         this.setHeight(height);
         this.notifyListenersRangeChanged();
     }
 
-    setRange(start:number, stop:number) {
+    setRange(start:number, stop:number):void {
         this.setRangeStart(start);
         this.setStop(stop);
         this.range = stop - start;
         this.notifyListenersRangeChanged();
     }
 
-    getRangeStart() {
+    getRangeStart():number {
         return this.startIndex;
     }
 
-    setRangeStart(startRange:number) {
+    setRangeStart(startRange:number):void {
         this.startIndex = startRange;
     }
 
-    getMin():number {
-        return this.backend.getMin(this.parameter);
+    getMin(parameter:number):number {
+        return this.backend.getMin(parameter);
     }
 
-    getMax() {
-        return this.backend.getMax(this.parameter);
+    getMax(parameter:number):number {
+        return this.backend.getMax(parameter);
     }
 
-    clearRange() {
+    clearRange():void {
         for (var row = 0; row < this.height; ++row) {
-            this.ranges[row][0] = -1;
-            this.ranges[row][1] = -1;
+            this.rangesStart[row] = -1;
+            this.rangesStop[row] = -1;
         }
     }
 
-    calculateVisiblePoints() {
+    calculateVisiblePoints():void {
         // Integer division
         var pointsPerPixel = ~~(this.getIndexRange() / this.height);
         var remainder = this.getIndexRange() % this.height;
@@ -148,7 +147,7 @@ class DataModel implements IDataModel {
 
         if (pointsPerPixel == 0) {
             // Less than one datapoint per pixel
-            pixelsPerIndexPoint = this.height / this.getIndexRange();
+            var pixelsPerIndexPoint = this.height / this.getIndexRange();
 
             console.log("Pixels per index point: " + pixelsPerIndexPoint);
             console.log("Height: " + this.height + ". Range: " + this.getIndexRange());
@@ -165,8 +164,8 @@ class DataModel implements IDataModel {
                 var flooredRow = Math.floor(currentRow);
                 // console.log('Floored row: ' +flooredRow +'. Index point: ' +currentIndex);
 
-                this.ranges[flooredRow][0] = currentIndex;
-                this.ranges[flooredRow][1] = currentIndex;
+                this.rangesStart[flooredRow] = currentIndex;
+                this.rangesStop[flooredRow] = currentIndex;
 
                 ++currentIndex;
                 if (currentIndex > end) {
@@ -180,12 +179,8 @@ class DataModel implements IDataModel {
             var currentStart = this.startIndex;
             // More than or equal to one point per pixel
             for (var row = 0; row < this.height; ++row) {
-
-                // console.log("Writing value at row " +row +". Value: " +currentStart);
-
-                this.ranges[row][0] = currentStart;
-                currentStart += pointsPerPixel;
-                this.ranges[row][1] = currentStart - 1;
+                this.rangesStart[row] = currentStart;
+                this.rangesStop[row] = currentStart - 1;
             }
 
             // TODO Spread the remainder points
@@ -194,62 +189,56 @@ class DataModel implements IDataModel {
 
     }
 
-    getRow(row) {
-        return {
-            start: this.rangesStart[row],
-            stop: this.rangesStop[row][1]
-        }
+    getRow(row:number):RowRange {
+        return new RowRange(this.rangesStart[row], this.rangesStop[row]);
     }
 
-    getNumberOfRows() {
+    getNumberOfRows():number {
         return this.height;
     }
 
-    getVisiblePoints() {
-        return {
-            start: this.startIndex,
-            stop: this.stopIndex
-        };
+    getVisiblePoints():Array<number> {
+        return [this.startIndex, this.stopIndex];
     }
 
-    setStop(stop) {
+    setStop(stop:number):void {
         this.stopIndex = stop;
     }
 
-    getHeight() {
+    getHeight():number {
         return this.height;
     }
 
-    setHeight(height) {
+    setHeight(height:number):void {
         this.height = height;
         this.calculateVisiblePoints();
     }
 
-    zoomIn() {
-        if (this.zoomLevel < this.ZOOM_LEVEL_MAX) {
+    zoomIn():void {
+        if (this.zoomLevel < DataModel.ZOOM_LEVEL_MAX) {
             ++this.zoomLevel;
         }
         this.updateAfterZoom();
     }
 
     zoomOut() {
-        if (this.zoomLevel > this.ZOOM_LEVEL_MIN) {
+        if (this.zoomLevel > DataModel.ZOOM_LEVEL_MIN) {
             --this.zoomLevel;
         }
         this.updateAfterZoom();
     }
 
-    updateAfterZoom() {
+    updateAfterZoom():void {
         var totalRange = this.backend.getRangeEnd() - this.backend.getRangeStart();
         this.range = totalRange / this.zoomLevel;
         this.calculateVisiblePoints();
         this.notifyListenersRangeChanged();
     }
 
-    scrollDown() {
+    scrollDown():void {
         var end = this.getRangeStart() + this.getIndexRange();
 
-        var newStart = undefined;
+        var newStart:number = undefined;
         if (end + this.scrollJump > this.backend.getRangeEnd()) {
             if (this.getRangeStart() == end - this.scrollJump) {
                 return;
@@ -263,9 +252,9 @@ class DataModel implements IDataModel {
         this.notifyListenersRangeChanged();
     }
 
-    scrollUp() {
+    scrollUp():void {
         var start = this.getRangeStart();
-        var newStart = undefined;
+        var newStart:number = undefined;
         if (start - this.scrollJump < this.backend.getRangeStart()) {
             if (start == this.backend.getRangeStart()) {
                 return;

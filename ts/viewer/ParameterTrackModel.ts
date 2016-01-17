@@ -1,9 +1,10 @@
 
+
 class ParameterTrackModel {
+    private parameterTrack:ParameterTrack;
 
 
-    constructor(parameter, dataModel) {
-        this.parameter = parameter;
+    constructor(private parameter:number, private dataModel:DataModel) {
         this.dataModel = dataModel;
         this.graphColumn = undefined;
         dataModel.addListener(this);
@@ -11,7 +12,7 @@ class ParameterTrackModel {
 
 
     // Returns an array with parameter value objects
-    getParameterPath() {
+    getParameterPath():Array<ValueSummary> {
         return this.dataModel.getValuesForParameter(this.parameter);
     }
 
@@ -31,18 +32,26 @@ class ParameterTrackModel {
         return this.parameter;
     }
 
-    setParameterTrack(parameterTrack) {
+    setParameterTrack(parameterTrack:ParameterTrack) {
         this.parameterTrack = parameterTrack;
     }
 
-    getRange() {
-        return {
-            min: this.dataModel.getMin(parameter),
-            max: this.dataModel.getMax(parameter)
-        };
+    //getRange() {
+    //    return {
+    //        min: this.dataModel.getMin(parameter),
+    //        max: this.dataModel.getMax(parameter)
+    //    };
+    //}
+
+    getMin():number {
+        return this.dataModel.getMin(this.parameter);
     }
 
-    updateMarkerLine(yCoord) {
+    getMax():number {
+        return this.dataModel.getMax(this.parameter);
+    }
+
+    updateMarkerLine(yCoord:number):void {
         this.parameterTrack.drawMarkerLine(yCoord);
     }
 

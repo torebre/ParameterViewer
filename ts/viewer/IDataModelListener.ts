@@ -1,5 +1,5 @@
 interface IDataModelListener {
 
-    rangeChanged()
+    rangeChanged():void
 
 }

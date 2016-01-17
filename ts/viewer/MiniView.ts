@@ -1,10 +1,10 @@
-//import {Component, bootstrap} from 'angular2';
+import {Component} from "angular2/core";
 
 
-
-@Component(
-
-)
+@Component({
+    selector: 'mini-view',
+    template: ''
+})
     class MiniView {
 
         constructor(private paper:RaphaelPaper) {
@@ -12,7 +12,6 @@
 
             var miniViewWindow = paper.rect(0, 0, 100, 100);
             $(miniViewWindow.node).attr("class", "mediumBold");
-
 
             var dragging = false;
 
