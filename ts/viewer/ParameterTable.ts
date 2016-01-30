@@ -9,23 +9,21 @@ import IBackend = Backend.IBackend;
 class ParameterTable {
     private dataModel: DataModel;
     private parameterTrackModels:Array<IParameterTrackModel> = [];
-    private parameterTracks:Array<ParameterTrack> = []
 
 
 
     constructor(colWidth: number, colHeight: number, backend: IBackend) {
         this.dataModel = new DataModel(colHeight, backend);
-        //parameterTrackModels = [];
-        parameterTracks = [];
+
         parameterTrackHeaders = [];
         papers = [];
         indexTrackMap = [];
         numberOfParameters = 0;
     }
 
-    updateMarkerLineForAllParameterTracks(yCoord: number):void {
-        for (var i = 0; i < parameterTracks.length; ++i) {
-            parameterTracks[i].getModel().updateMarkerLine(yCoord);
+    public updateMarkerLineForAllParameterTracks(yCoord: number):void {
+        for (let i = 0; i < this.parameterTrackModels.length; ++i) {
+            this.parameterTrackModels[i].updateMarkerLine(yCoord);
         }
     }
 
@@ -33,8 +31,8 @@ class ParameterTable {
         delete this.parameterTrackModels[parameter];
     }
 
-    drawParameter(trackContainerElement, parameterName: number) {
-        var parameterTrackModel = parameterTrackModels[parameterName];
+    drawParameter(trackContainerElement, parameterName: number):void {
+        var parameterTrackModel = this.parameterTrackModels[parameterName];
 
         console.log('Model: ' + parameterTrackModel);
 
@@ -61,7 +59,7 @@ class ParameterTable {
     }
 
     setColumnWidths(widths: Array<number>) {
-        for (counter = 0; counter < numberOfParameters; ++counter) {
+        for (let counter = 0; counter < numberOfParameters; ++counter) {
             var key = indexTrackMap[counter];
             parameterTracks[key].setWidth(widths[counter]);
         }
@@ -121,7 +119,7 @@ class ParameterTable {
         }
     }
 
-    calculateLayout() {
+    calculateLayout():number {
         if (parameterTracks.length == 0) {
             return 0;
         }
@@ -132,38 +130,29 @@ class ParameterTable {
         return widths;
     }
 
-    zoomIn(): void {
+    zoomIn():void {
         dataModel.zoomIn();
     }
 
-    zoomOut(): void {
+    zoomOut():void {
         dataModel.zoomOut();
     }
 
-    scrollDown(): void {
+    scrollDown():void {
         dataModel.scrollDown();
     }
 
-    scrollUp(): void {
+    scrollUp():void {
         dataModel.scrollUp();
     }
 
-    getDisplayedParameters(): void {
+    getDisplayedParameters():void {
         var result = [];
         for (var key in parameterTrackModels) {
             result.push(key);
         }
         return result;
-    };
-
-
-//    allowDrop(ev): void {
-//    ev.preventDefault();
-//}
-//
-//    function drag(ev) {
-//    ev.dataTransfer.setData("text", ev.target.id);
-//}
+    }
 
 
     onDrop(ev: DragEvent): void {

@@ -57,9 +57,9 @@ module.exports = function(grunt) {
                 // Point to the files that should be updated when
                 // you run `grunt wiredep`
                 src: [
-                    'build/ngApp2.html'
-                ],
-                cwd: 'ts',
+                    'build/ngApp2.html',
+                    'build/parameterList.html'
+                ]
             }
         }
 
@@ -70,12 +70,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.loadNpmTasks('grunt-wiredep');
 
     // Task definitions
-    grunt.registerTask('default', ['browserify', 'copy']);
+    grunt.registerTask('default', ['copy']);
 
 };

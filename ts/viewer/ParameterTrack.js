@@ -1,16 +1,16 @@
-System.register(["angular2/angular2"], function(exports_1) {
+System.register(["angular2/core"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
         else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
-    var angular2_1;
+    var core_1;
     var ParameterTrack;
     return {
         setters:[
-            function (angular2_1_1) {
-                angular2_1 = angular2_1_1;
+            function (core_1_1) {
+                core_1 = core_1_1;
             }],
         execute: function() {
             ParameterTrack = (function () {
@@ -24,21 +24,23 @@ System.register(["angular2/angular2"], function(exports_1) {
                     this.colour = '#000000';
                     this.raphaelPath = undefined;
                     this.boundingBox = undefined;
-                    this.parameterTrackModel.setParameterTrack(this);
+                    this.parameterTrackModel.addListener(this);
                 }
                 ParameterTrack.prototype.addBoundingBox = function () {
-                    boundingBox = paper.rect(xOffset, yOffset, width, height);
-                    boundingBox.attr('stroke', this.colour);
+                    this.boundingBox = this.paper.rect(this.xOffset, this.yOffset, this.width, this.height);
+                    this.boundingBox.attr('stroke', this.colour);
                 };
-                ParameterTrack.prototype.drawMarkerLine = function (yCoord) {
-                    if (line !== undefined) {
-                        line.remove();
+                ParameterTrack.prototype.onDrop = function ($event) {
+                };
+                ParameterTrack.prototype.markerLineUpdated = function () {
+                    if (this.line !== undefined) {
+                        this.line.remove();
                     }
                     if (yCoord < 0) {
                         return;
                     }
-                    line = paper.path('M' + xOffset + ',' + yCoord + "h" + width);
-                    line.attr('stroke', 'blue');
+                    this.line = this.paper.path('M' + this.xOffset + ',' + yCoord + "h" + this.width);
+                    this.line.attr('stroke', 'blue');
                 };
                 ParameterTrack.prototype.getModel = function () {
                     return this.parameterTrackModel;
@@ -47,39 +49,40 @@ System.register(["angular2/angular2"], function(exports_1) {
                     this.colour = colour;
                 };
                 ParameterTrack.prototype.render = function () {
-                    if (raphaelPath !== undefined) {
-                        raphaelPath.remove();
-                        boundingBox.remove();
+                    if (this.raphaelPath !== undefined) {
+                        this.raphaelPath.remove();
+                        this.boundingBox.remove();
                     }
-                    addBoundingBox();
-                    var coordinates = parameterTrackModel.getParameterPath();
-                    path = generateFullSvgPath(coordinates);
-                    raphaelPath = this.paper.path(path);
-                    raphaelPath.attr('stroke', this.colour);
+                    this.addBoundingBox();
+                    var coordinates = this.parameterTrackModel.getParameterPath();
+                    var path = this.generateFullSvgPath(coordinates);
+                    this.raphaelPath = this.paper.path(path);
+                    this.raphaelPath.attr('stroke', this.colour);
                 };
                 ParameterTrack.prototype.setHeight = function (newHeight) {
                     console.log("Setting height for track: " + newHeight);
-                    paper.setSize(width, newHeight);
-                    height = newHeight;
+                    this.paper.setSize(this.width, newHeight);
+                    this.height = newHeight;
                 };
                 ParameterTrack.prototype.setWidth = function (newWidth) {
-                    paper.setSize(newWidth, height);
-                    width = newWidth;
+                    this.paper.setSize(newWidth, this.height);
+                    this.width = newWidth;
                 };
-                ParameterTrack.prototype.setXOffset = function (xOffset2) {
-                    xOffset = xOffset2;
+                ParameterTrack.prototype.setXOffset = function (xOffset) {
+                    this.xOffset = xOffset;
                 };
                 ParameterTrack.prototype.scaleValue = function (value, min, max) {
-                    return (value - min) * width / (max - min);
+                    return (value - min) * this.width / (max - min);
                 };
                 ParameterTrack.prototype.generateFullSvgPath = function (coordinates) {
-                    var svgPath = "M " + xOffset + " " + yOffset;
+                    var svgPath = "M " + this.xOffset + " " + this.yOffset;
                     var skipRows = 0;
-                    var parameterRange = parameterTrackModel.getRange();
-                    for (var row = 0; row < height; ++row) {
+                    var parameterRangeMin = this.parameterTrackModel.getMin();
+                    var parameterRangeMax = this.parameterTrackModel.getMax();
+                    for (var row = 0; row < this.height; ++row) {
                         if (coordinates[row]) {
-                            var scaledAverage = scaleValue(coordinates[row].average, parameterRange.min, parameterRange.max);
-                            svgPath += "L" + (xOffset + scaledAverage) + ', ' + (yOffset + row);
+                            var scaledAverage = this.scaleValue(coordinates[row].average, parameterRangeMin, parameterRangeMax);
+                            svgPath += "L" + (this.xOffset + scaledAverage) + ', ' + (this.yOffset + row);
                             skipRows = 0;
                         }
                         else {
@@ -89,7 +92,10 @@ System.register(["angular2/angular2"], function(exports_1) {
                     return svgPath;
                 };
                 ParameterTrack = __decorate([
-                    angular2_1.Component()
+                    core_1.Component({
+                        selector: "parameter-track",
+                        template: "<div (drop)='addParameter'</div>"
+                    })
                 ], ParameterTrack);
                 return ParameterTrack;
             })();

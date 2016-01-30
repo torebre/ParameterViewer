@@ -1,4 +1,3 @@
-//"outDir": "build/ts_out/parameterViewer.js",
 {
   "compilerOptions": {
     "module": "system",
@@ -12,9 +11,9 @@
     "sourceMap": true
   },
   "exclude": [
+    "node_modules",
     "bower_components",
     "build",
-    "main",
-    "node_modules"
+    "main"
   ]
 }

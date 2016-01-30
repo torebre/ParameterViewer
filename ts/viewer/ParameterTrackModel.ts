@@ -1,47 +1,38 @@
 
 
+import {listeners} from "cluster";
 class ParameterTrackModel {
-    private parameterTrack:ParameterTrack;
+    private listeners:ParameterTrackModelListener[];
 
 
     constructor(private parameter:number, private dataModel:DataModel) {
         this.dataModel = dataModel;
-        this.graphColumn = undefined;
         dataModel.addListener(this);
     }
-
 
     // Returns an array with parameter value objects
     getParameterPath():Array<ValueSummary> {
         return this.dataModel.getValuesForParameter(this.parameter);
     }
 
-    rangeChanged() {
-        this.parameterTrack.render();
+    rangeChanged():void {
+        this.fireRender()
     }
 
-    layoutChanged() {
-        this.parameterTrack.render();
+    layoutChanged():void {
+        this.fireRender();
     }
 
-    render = function() {
-        this.parameterTrack.render();
+    private fireRender():void {
+        for(let listener in this.listeners) {
+            listener.render();
+        }
     }
+
 
     getParameter() {
         return this.parameter;
     }
-
-    setParameterTrack(parameterTrack:ParameterTrack) {
-        this.parameterTrack = parameterTrack;
-    }
-
-    //getRange() {
-    //    return {
-    //        min: this.dataModel.getMin(parameter),
-    //        max: this.dataModel.getMax(parameter)
-    //    };
-    //}
 
     getMin():number {
         return this.dataModel.getMin(this.parameter);
@@ -52,7 +43,13 @@ class ParameterTrackModel {
     }
 
     updateMarkerLine(yCoord:number):void {
-        this.parameterTrack.drawMarkerLine(yCoord);
+        for(let listener in this.listeners) {
+            listener.updateMarkerLine(yCoord);
+        }
+    }
+
+    addListener(parameterTrack:ParameterTrackModelListener):void {
+        this.listeners.push(parameterTrack);
     }
 
 }

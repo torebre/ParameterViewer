@@ -7,9 +7,9 @@ import {Component} from "angular2/core";
 
 @Component({
     selector: "parameter-track",
-    template: ""
+    template: "<div (drop)='addParameter'</div>"
 })
-class ParameterTrack {
+class ParameterTrack implements ParameterTrackModelListener {
     private colour: string = '#000000';
     private path: string;
     private raphaelPath:RaphaelPath = undefined;
@@ -17,10 +17,14 @@ class ParameterTrack {
     private line:RaphaelPath;
 
 
-    constructor(private parameterTrackModel: ParameterTrackModel, private paper: RaphaelPaper, private xOffset: number,
-                private yOffset: number, private width: number, private height: number) {
+    constructor(private parameterTrackModel:ParameterTrackModel,
+                private paper:RaphaelPaper,
+                private xOffset:number,
+                private yOffset:number,
+                private width:number,
+                private height:number) {
         //this.parameterTrackModel = parameterTrackModel;
-        this.parameterTrackModel.setParameterTrack(this);
+        this.parameterTrackModel.addListener(this);
         //this.paper = paper;
         //var xOffset = xOffset;
         //this.yOffset = yOffset;
@@ -39,11 +43,18 @@ class ParameterTrack {
         this.boundingBox.attr('stroke', this.colour);
     }
 
+
+    onDrop($event:any):void {
+        // TODO Try to not use any above
+
+
+    }
+
     /**
      A negative yCoord indicates that the line should
      not be drawn
      **/
-    drawMarkerLine(yCoord: number):void {
+    markerLineUpdated():void {
         if(this.line !== undefined) {
             this.line.remove();
         }

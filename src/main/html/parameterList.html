@@ -2,9 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport">
+    <link rel="stylesheet" type="text/css" href="app.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.18.4/system.js"></script>
+    <title>Test</title>
+    <!-- bower:js -->
+    <!-- endbower -->
 </head>
 <body>
+
+<script>
+    System.config({baseURL: 'ts_out'});
+    System.import('./ts_out/viewer/ParameterList.js');
+</script>
+
+<parameter-list>
+
+
+</parameter-list>
+
+
 
 </body>
 </html>

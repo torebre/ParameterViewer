@@ -1,38 +1,37 @@
-System.register(["angular2/src/core/metadata"], function(exports_1) {
+System.register(["angular2/core"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
         else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
-    var metadata_1;
-    var ParameterViewer;
+    var core_1;
+    var ParameterTable;
     return {
         setters:[
-            function (metadata_1_1) {
-                metadata_1 = metadata_1_1;
+            function (core_1_1) {
+                core_1 = core_1_1;
             }],
         execute: function() {
-            ParameterViewer = (function () {
-                function ParameterViewer(colWidth, colHeight, backend) {
+            ParameterTable = (function () {
+                function ParameterTable(colWidth, colHeight, backend) {
                     this.parameterTrackModels = [];
-                    dataModel = new DataModel(colHeight, backend);
-                    parameterTracks = [];
+                    this.dataModel = new DataModel(colHeight, backend);
                     parameterTrackHeaders = [];
                     papers = [];
                     indexTrackMap = [];
                     numberOfParameters = 0;
                 }
-                ParameterViewer.prototype.updateMarkerLineForAllParameterTracks = function (yCoord) {
-                    for (var i = 0; i < parameterTracks.length; ++i) {
-                        parameterTracks[i].getModel().updateMarkerLine(yCoord);
+                ParameterTable.prototype.updateMarkerLineForAllParameterTracks = function (yCoord) {
+                    for (var i = 0; i < this.parameterTrackModels.length; ++i) {
+                        this.parameterTrackModels[i].updateMarkerLine(yCoord);
                     }
                 };
-                ParameterViewer.prototype.removeParameter = function (parameter) {
-                    delete parameterTrackModels[parameter];
+                ParameterTable.prototype.removeParameter = function (parameter) {
+                    delete this.parameterTrackModels[parameter];
                 };
-                ParameterViewer.prototype.drawParameter = function (trackContainerElement, parameterName) {
-                    var parameterTrackModel = parameterTrackModels[parameterName];
+                ParameterTable.prototype.drawParameter = function (trackContainerElement, parameterName) {
+                    var parameterTrackModel = this.parameterTrackModels[parameterName];
                     console.log('Model: ' + parameterTrackModel);
                     if (papers[parameterName] == undefined) {
                         papers[parameterName] = Raphael(trackContainerElement, colWidth, colHeight);
@@ -44,26 +43,26 @@ System.register(["angular2/src/core/metadata"], function(exports_1) {
                     parameterTrackHeaders[parameterName] = new ParameterTrackHeader(paper, parameterTrackModel);
                     render();
                 };
-                ParameterViewer.prototype.addParameterTrack = function (parameterName) {
+                ParameterTable.prototype.addParameterTrack = function (parameterName) {
                     console.log('Adding track: ' + parameterName + '. Length: ' + parameterTrackModels.length);
                     parameterTrackModels[parameterName] = new ParameterTrackModel(parameterName, dataModel);
                     console.log('Length after update: ' + parameterTrackModels.length);
                 };
-                ParameterViewer.prototype.setColumnWidths = function (widths) {
-                    for (counter = 0; counter < numberOfParameters; ++counter) {
+                ParameterTable.prototype.setColumnWidths = function (widths) {
+                    for (var counter = 0; counter < numberOfParameters; ++counter) {
                         var key = indexTrackMap[counter];
                         parameterTracks[key].setWidth(widths[counter]);
                     }
                     render();
                 };
-                ParameterViewer.prototype.setColumnHeights = function (heights) {
-                    for (counter = 0; counter < numberOfParameters; ++counter) {
+                ParameterTable.prototype.setColumnHeights = function (heights) {
+                    for (var counter = 0; counter < numberOfParameters; ++counter) {
                         var key = indexTrackMap[counter];
                         parameterTracks[key].setHeight(heights[counter]);
                     }
                     render();
                 };
-                ParameterViewer.prototype.setColour = function (parameter, colour) {
+                ParameterTable.prototype.setColour = function (parameter, colour) {
                     for (var i = 0; i < parameterTracks.length; ++i) {
                         if (parameterTracks[i].getModel().getParameter() == parameter) {
                             parameterTracks[i].setColour(colour);
@@ -71,11 +70,11 @@ System.register(["angular2/src/core/metadata"], function(exports_1) {
                         }
                     }
                 };
-                ParameterViewer.prototype.redraw = function () {
+                ParameterTable.prototype.redraw = function () {
                     console.log('Redrawing');
                     render();
                 };
-                ParameterViewer.prototype.updateColumnWidths = function () {
+                ParameterTable.prototype.updateColumnWidths = function () {
                     if (parameterTracks.length == 0) {
                         return;
                     }
@@ -89,14 +88,14 @@ System.register(["angular2/src/core/metadata"], function(exports_1) {
                         cumulativeWidth += widthPerTrack;
                     }
                 };
-                ParameterViewer.prototype.render = function () {
+                ParameterTable.prototype.render = function () {
                     console.log('Number of parameter tracks: ' + parameterTracks.length);
                     console.log('Number of parameter track models: ' + parameterTrackModels.length);
                     for (var key in parameterTrackModels) {
                         parameterTrackModels[key].render();
                     }
                 };
-                ParameterViewer.prototype.calculateLayout = function () {
+                ParameterTable.prototype.calculateLayout = function () {
                     if (parameterTracks.length == 0) {
                         return 0;
                     }
@@ -106,33 +105,40 @@ System.register(["angular2/src/core/metadata"], function(exports_1) {
                     }
                     return widths;
                 };
-                ParameterViewer.prototype.zoomIn = function () {
+                ParameterTable.prototype.zoomIn = function () {
                     dataModel.zoomIn();
                 };
-                ParameterViewer.prototype.zoomOut = function () {
+                ParameterTable.prototype.zoomOut = function () {
                     dataModel.zoomOut();
                 };
-                ParameterViewer.prototype.scrollDown = function () {
+                ParameterTable.prototype.scrollDown = function () {
                     dataModel.scrollDown();
                 };
-                ParameterViewer.prototype.scrollUp = function () {
+                ParameterTable.prototype.scrollUp = function () {
                     dataModel.scrollUp();
                 };
-                ParameterViewer.prototype.getDisplayedParameters = function () {
+                ParameterTable.prototype.getDisplayedParameters = function () {
                     var result = [];
                     for (var key in parameterTrackModels) {
                         result.push(key);
                     }
                     return result;
                 };
-                ;
-                ParameterViewer = __decorate([
-                    metadata_1.Component({
-                        selector: 'parameterViewer',
-                        templateUrl: 'parameterTable.html'
+                ParameterTable.prototype.onDrop = function (ev) {
+                    ev.preventDefault();
+                    var data = ev.dataTransfer.getData("text");
+                    var parameterViewer = angular.element($("#parameter-view")).scope();
+                    parameterViewer.$apply(function () {
+                        parameterViewer.addParameter(data.substr(10));
+                    });
+                };
+                ParameterTable = __decorate([
+                    core_1.Component({
+                        selector: 'parameter-table',
+                        templateUrl: '../templates/parameterTable.html'
                     })
-                ], ParameterViewer);
-                return ParameterViewer;
+                ], ParameterTable);
+                return ParameterTable;
             })();
         }
     }

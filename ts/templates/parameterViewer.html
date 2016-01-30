@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <parameter-list>
 
-</body>
-</html>
+            </parameter-list>
+
+        </div>
+        <div class="col-md-8 parameter-view" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <parameter-table>
+
+
+            </parameter-table>
+
+            <div id="parameter-view" ng-keydown="handleKeyDownOnGraph($event)" tabindex="1">
+                <script type="text/javascript">
+                    // TODO Instead make use of drag and drop in AngularJs
+
+                </script>
+                <table id="parameter-view-table" parameter-table>
+                    <thead>
+                    <tr>
+                        <th col-resizeable ng-dblclick="headerDblClick(parameter)" ng-repeat="parameter in displayedParameters">
+                            Parameter: {{ parameter }}
+                        </th>
+                    <tr></thead>
+                    <tr>
+                        <td ng-repeat="parameter in displayedParameters">
+                            <div parameter-track parameter="{{ parameter }}"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-2" ng-include src="'partials/MiniView.html'"></div>
+    </div>
+</div>
+

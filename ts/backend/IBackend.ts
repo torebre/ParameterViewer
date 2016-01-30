@@ -1,24 +1,24 @@
-interface IBackend {
+module Backend {
 
-    getBlockLengthfunction(): number
+    export interface IBackend {
 
-getRangeStart(): number
+        getBlockLengthfunction():number
 
-getBlockIndices(rangeStart: number, rangeEnd: number): number
+        getRangeStart():number
 
+        getBlockIndices(rangeStart:number, rangeEnd:number):number
 
-getRangeEnd(): number
+        getRangeEnd():number
 
-getMin(parameter: number): number
+        getMin(parameter:number):number
 
-
-getMax(parameter: number): number
+        getMax(parameter:number):number
 
 // Calculates the minimum, maximum and average for the
 // parameter within the range [start, stop]. The start
 // and stop values are integers that represent a range
 // of index points
-getValue(parameter: number, start: number, stop: number): number
+        getValue(parameter:number, start:number, stop:number):ValueSummary
 
 //{
 //    var average = 0;
@@ -44,6 +44,9 @@ getValue(parameter: number, start: number, stop: number): number
 //    // console.log('Average: ' +average +'. Min: ' +min +'. Max: ' +max);
 //
 //}
+
+
+    }
 
 
 }

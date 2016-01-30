@@ -1,6 +1,5 @@
 
 
-
 class ValueSummary {
     min:number;
     max:number;
