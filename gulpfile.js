@@ -1,24 +1,25 @@
 var gulp = require('gulp');
 var wiredep = require('wiredep').stream;
-var gulpBowerFiles = require('gulp-bower-files');
+var gulpBowerFiles = require('main-bower-files');
 
 
 gulp.task('default', function() {
 // TODO
 });
 
-
 gulp.task('bower', function () {
     gulp.src('./src/main/html/parameterList.html')
-        .pipe(wiredep())
+        .pipe(wiredep({'ignorePath': '../../../bower_components/'}))
         .pipe(gulp.dest('./build'));
 });
 
-
-
-gulp.task("bower-files", function(){
-    gulpBowerFiles().pipe(gulp.dest("./lib"));
+gulp.task("bower-files", function() {
+    gulp.src(gulpBowerFiles()).pipe(gulp.dest("./build"));
 });
 
+gulp.task("copy-html", function() {
+    gulp.src("./html/*.html")
+        .pipe(gulp.dest("./build"));
+})
 
-gulp.task('build', ['bower', 'bower-files']);
+gulp.task('build', ['bower-files', 'bower']);
