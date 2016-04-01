@@ -1,7 +1,7 @@
-
-
 import {listeners} from "cluster";
-class ParameterTrackModel {
+
+
+export class ParameterTrackModel {
     private listeners:ParameterTrackModelListener[];
 
 
@@ -24,7 +24,7 @@ class ParameterTrackModel {
     }
 
     private fireRender():void {
-        for(let listener in this.listeners) {
+        for (let listener in this.listeners) {
             listener.render();
         }
     }
@@ -43,7 +43,7 @@ class ParameterTrackModel {
     }
 
     updateMarkerLine(yCoord:number):void {
-        for(let listener in this.listeners) {
+        for (let listener in this.listeners) {
             listener.updateMarkerLine(yCoord);
         }
     }

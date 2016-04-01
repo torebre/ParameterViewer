@@ -5,9 +5,9 @@
  - Provide functions that calculate a summary of a range
  - of data values in a pixel.
  */
-import IBackend = Backend.IBackend;
+import {IBackend} from "../backend/IBackend";
 
-class DataModel {
+export class DataModel {
     public static get ZOOM_LEVEL_MAX():number {
         return 10;
     }
@@ -88,15 +88,12 @@ class DataModel {
     }
 
     getValuesForParameter(parameter:number):Array<ValueSummary> {
-        var currentRange = this.getRange();
-
         var parameterValues:Array<ValueSummary> = [];
-        // TODO Figure out what let does
-        for (let row = 0; row < currentRange.length; ++row) {
+        for (let row = 0; row < this.rangesStart.length; ++row) {
             // TODO Use scaled values when finished debugging
             // parameterValues.push(this.getScaledValue(parameter, currentRange[row][0], currentRange[row][1]);
 
-            parameterValues.push(this.getValue(parameter, currentRange[row][0], currentRange[row][1]));
+            parameterValues.push(this.getValue(parameter, this.rangesStart[row], this.rangesStop[row]));
         }
         return parameterValues;
     }
@@ -273,9 +270,9 @@ class DataModel {
         return this.range;
     }
 
-    getRange() {
-        return this.ranges;
-    }
+    //getRange() {
+    //    return this.ranges;
+    //}
 
 
 }

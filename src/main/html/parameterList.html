@@ -4,17 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport">
     <link rel="stylesheet" type="text/css" href="app.css">
+    <!--<script src="https://github.jspm.io/jmcriffey/bower-traceur-runtime@0.0.91/traceur-runtime.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.18.4/system.js"></script>
     <title>Test</title>
     <!-- bower:js -->
     <!-- endbower -->
-</head>
-<body>
 
-<script>
-    System.config({baseURL: 'ts_out'});
-    System.import('./ts_out/viewer/ParameterList.js');
-</script>
+    <script>
+        System.config({
+            baseURL: 'ts_out',
+//        packages: {
+//            app: {
+//                format: 'register',
+//                defaultExtension: 'js'
+//            }
+//        }
+            map: {
+                app: '/ts_out/'
+            }
+
+        });
+        System.import('./ts_out/Main.js');
+    </script>
+
+</head>
+
+<body>
 
 <parameter-list>
 

@@ -1,5 +1,8 @@
 ///<reference path="DataModel.ts"/>
 import {Component} from "angular2/core";
+import {ParameterTable} from "./ParameterTable.js";
+
+
 
 
 @Component({

@@ -1,5 +1,7 @@
 import {Component} from "angular2/core";
-import IBackend = Backend.IBackend;
+import {IBackend } from "../backend/IBackend";
+import {DataModel} from "../viewer/DataModel";
+import {ParameterTrack} from "../viewer/ParameterTrack";
 
 
 @Component({
@@ -9,16 +11,17 @@ import IBackend = Backend.IBackend;
 class ParameterTable {
     private dataModel: DataModel;
     private parameterTrackModels:Array<IParameterTrackModel> = [];
+    //parameterTrackHeaders = [];
+    private papers:Array<RaphaelPaper> = [];
+    //indexTrackMap = [];
+    numberOfParameters = 0;
+
+    private parameterTracks:Array<ParameterTable> = [];
 
 
 
-    constructor(colWidth: number, colHeight: number, backend: IBackend) {
+    constructor(private colWidth: number, private colHeight: number, private backend: IBackend) {
         this.dataModel = new DataModel(colHeight, backend);
-
-        parameterTrackHeaders = [];
-        papers = [];
-        indexTrackMap = [];
-        numberOfParameters = 0;
     }
 
     public updateMarkerLineForAllParameterTracks(yCoord: number):void {
@@ -31,32 +34,32 @@ class ParameterTable {
         delete this.parameterTrackModels[parameter];
     }
 
-    drawParameter(trackContainerElement, parameterName: number):void {
+    drawParameter(trackContainerElement: HTMLElement, parameterName: number):void {
         var parameterTrackModel = this.parameterTrackModels[parameterName];
 
         console.log('Model: ' + parameterTrackModel);
 
-        if (papers[parameterName] == undefined) {
-            papers[parameterName] = Raphael(trackContainerElement, colWidth, colHeight);
+        if (this.papers[parameterName] == undefined) {
+            this.papers[parameterName] = Raphael(trackContainerElement, this.colWidth, this.colHeight);
         }
-        var paper = Raphael(trackContainerElement, colWidth, colHeight);
+        var paper = Raphael(trackContainerElement, this.colWidth, this.colHeight);
         // TODO Need to figure out the life cycle of the papers, and then
         // delete the old parameter tracks attached to the old papers
-        parameterTracks[parameterName] = new ParameterTrack(parameterTrackModel, paper, 0, 0,
-            colHeight,
-            colWidth, dataModel);
+        this.parameterTracks[parameterName] = new ParameterTrack(parameterTrackModel, paper, 0, 0,
+            this.colHeight,
+            this.colWidth);
         indexTrackMap[numberOfParameters] = parameterName;
         ++numberOfParameters;
-        parameterTrackHeaders[parameterName] = new ParameterTrackHeader(paper, parameterTrackModel);
+        this.parameterTrackHeaders[parameterName] = new ParameterTrackHeader(paper, parameterTrackModel);
 
         render();
     }
 
-    addParameterTrack(parameterName: string) {
-        console.log('Adding track: ' + parameterName + '. Length: ' + parameterTrackModels.length);
-        parameterTrackModels[parameterName] = new ParameterTrackModel(parameterName, dataModel);
-        console.log('Length after update: ' + parameterTrackModels.length);
-    }
+    //addParameterTrack(parameterName: string) {
+    //    console.log('Adding track: ' + parameterName + '. Length: ' + parameterTrackModels.length);
+    //    parameterTrackModels[parameterName] = new ParameterTrackModel(parameterName, dataModel);
+    //    console.log('Length after update: ' + parameterTrackModels.length);
+    //}
 
     setColumnWidths(widths: Array<number>) {
         for (let counter = 0; counter < numberOfParameters; ++counter) {
@@ -92,7 +95,7 @@ class ParameterTable {
 
     updateColumnWidths() {
         // TODO For now just give all the columns the same width
-        if (parameterTracks.length == 0) {
+        if (this.parameterTracks.length == 0) {
             return;
         }
         var cumulativeWidth = 0;
@@ -135,34 +138,34 @@ class ParameterTable {
     }
 
     zoomOut():void {
-        dataModel.zoomOut();
+        this.dataModel.zoomOut();
     }
 
     scrollDown():void {
-        dataModel.scrollDown();
+        this.dataModel.scrollDown();
     }
 
     scrollUp():void {
-        dataModel.scrollUp();
+        this.dataModel.scrollUp();
     }
 
-    getDisplayedParameters():void {
-        var result = [];
-        for (var key in parameterTrackModels) {
+    getDisplayedParameters(): Array<String> {
+        var result:Array<String> = [];
+        for (var key in this.parameterTrackModels) {
             result.push(key);
         }
         return result;
     }
 
 
-    onDrop(ev: DragEvent): void {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    var parameterViewer = angular.element($("#parameter-view")).scope();
-    parameterViewer.$apply(function () {
-        parameterViewer.addParameter(data.substr(10));
-    })
-}
+    //onDrop(ev: DragEvent): void {
+    //ev.preventDefault();
+    //var data = ev.dataTransfer.getData("text");
+    //var parameterViewer = angular.element($("#parameter-view")).scope();
+    //parameterViewer.$apply(function () {
+    //    parameterViewer.addParameter(data.substr(10));
+    //})
+//}
 
 
 }

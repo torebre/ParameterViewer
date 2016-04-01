@@ -3,13 +3,14 @@
  parameters given to the constructor.
  */
 import {Component} from "angular2/core";
+import {ParameterTrackModel} from "./ParameterTrackModel";
 
 
 @Component({
     selector: "parameter-track",
     template: "<div (drop)='addParameter'</div>"
 })
-class ParameterTrack implements ParameterTrackModelListener {
+export class ParameterTrack implements ParameterTrackModelListener {
     private colour: string = '#000000';
     private path: string;
     private raphaelPath:RaphaelPath = undefined;
@@ -23,18 +24,7 @@ class ParameterTrack implements ParameterTrackModelListener {
                 private yOffset:number,
                 private width:number,
                 private height:number) {
-        //this.parameterTrackModel = parameterTrackModel;
         this.parameterTrackModel.addListener(this);
-        //this.paper = paper;
-        //var xOffset = xOffset;
-        //this.yOffset = yOffset;
-        //var width = width2;
-        //var height = height2;
-        //this.colour = '#000000';
-        // This represents the drawn line
-        //var path = undefined;
-        // TODO Is it necessery to have access to both paths?
-
     }
 
 
@@ -58,10 +48,10 @@ class ParameterTrack implements ParameterTrackModelListener {
         if(this.line !== undefined) {
             this.line.remove();
         }
-        if(yCoord < 0) {
-            return;
-        }
-        this.line = this.paper.path('M' +this.xOffset +',' +yCoord +"h" +this.width);
+        //if(this.yCoord < 0) {
+        //    return;
+        //}
+        this.line = this.paper.path('M' +this.xOffset +',' +this.yOffset +"h" +this.width);
         // TODO Colour just for testing
         this.line.attr('stroke', 'blue');
     }

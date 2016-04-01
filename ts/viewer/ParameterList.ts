@@ -1,6 +1,5 @@
 import {Component} from "angular2/core";
-import IBackend = Backend.IBackend;
-//import {IBackend} from "../backend/Backend";
+import {IBackend} from "../backend/IBackend";
 
 
 // TODO Figure out what the provider should be
@@ -9,14 +8,11 @@ import IBackend = Backend.IBackend;
 @Component({
     selector: "parameter-list",
     templateUrl: "templates/parameterList.html",
-    providers: [Backend]
+    providers: [IBackend]
 })
-class ParameterList {
-
+export class ParameterList {
 
     constructor(private backend:IBackend) {
-
-
 
     }
 
