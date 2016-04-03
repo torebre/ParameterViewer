@@ -3,7 +3,7 @@
  parameters given to the constructor.
  */
 import {Component} from "angular2/core";
-import {ParameterTrackModel} from "./ParameterTrackModel";
+import {IParameterTrackModel} from "../backend/IParameterTrackModel";
 
 
 @Component({
@@ -18,7 +18,7 @@ export class ParameterTrack implements ParameterTrackModelListener {
     private line:RaphaelPath;
 
 
-    constructor(private parameterTrackModel:ParameterTrackModel,
+    constructor(private parameterTrackModel:IParameterTrackModel,
                 private paper:RaphaelPaper,
                 private xOffset:number,
                 private yOffset:number,
@@ -56,7 +56,7 @@ export class ParameterTrack implements ParameterTrackModelListener {
         this.line.attr('stroke', 'blue');
     }
 
-    getModel():ParameterTrackModel {
+    getModel():IParameterTrackModel {
         return this.parameterTrackModel;
     }
 

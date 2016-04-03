@@ -1,9 +1,10 @@
 import {listeners} from "cluster";
+import {DataModel} from "./DataModel"
+import {IParameterTrackModel} from "../backend/IParameterTrackModel";
 
 
-export class ParameterTrackModel {
+export class ParameterTrackModel implements IParameterTrackModel {
     private listeners:ParameterTrackModelListener[];
-
 
     constructor(private parameter:number, private dataModel:DataModel) {
         this.dataModel = dataModel;
@@ -29,9 +30,13 @@ export class ParameterTrackModel {
         }
     }
 
-
-    getParameter() {
+    getParameter():number {
         return this.parameter;
+    }
+
+    getParameterName():string {
+        // TODO Figure out how to get name
+        return "";
     }
 
     getMin():number {
@@ -46,6 +51,10 @@ export class ParameterTrackModel {
         for (let listener in this.listeners) {
             listener.updateMarkerLine(yCoord);
         }
+    }
+
+    render():void {
+        // TODO Implement method
     }
 
     addListener(parameterTrack:ParameterTrackModelListener):void {

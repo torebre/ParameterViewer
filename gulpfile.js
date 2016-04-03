@@ -20,6 +20,12 @@ gulp.task("bower-files", function() {
 gulp.task("copy-html", function() {
     gulp.src("./html/*.html")
         .pipe(gulp.dest("./build"));
-})
+});
 
-gulp.task('build', ['bower-files', 'bower']);
+gulp.task("copy-templates", function() {
+    gulp.src("./ts/templates/*.html")
+        .pipe(gulp.dest("./build/templates"));
+});
+
+
+gulp.task('build', ['bower-files', 'bower', 'copy-templates']);

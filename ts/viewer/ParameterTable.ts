@@ -2,21 +2,26 @@ import {Component} from "angular2/core";
 import {IBackend } from "../backend/IBackend";
 import {DataModel} from "../viewer/DataModel";
 import {ParameterTrack} from "../viewer/ParameterTrack";
+import {ParameterTrackHeader} from "../viewer/ParameterTrackHeader";
+import {IParameterTrackModel} from "../backend/IParameterTrackModel";
 
 
 @Component({
     selector: 'parameter-table',
-    templateUrl: '../templates/parameterTable.html'
+    templateUrl: '../templates/parameterTable.html',
 })
-class ParameterTable {
+export class ParameterTable {
     private dataModel: DataModel;
     private parameterTrackModels:Array<IParameterTrackModel> = [];
-    //parameterTrackHeaders = [];
+    private parameterTrackHeaders:Array<ParameterTrackHeader> = [];
     private papers:Array<RaphaelPaper> = [];
-    //indexTrackMap = [];
-    numberOfParameters = 0;
+    private indexTrackMap:Array<number> = [];
+    private numberOfParameters = 0;
 
-    private parameterTracks:Array<ParameterTable> = [];
+    // The width needs to come from somewhere, and probably should not be specified here
+    private width:number = 800;
+
+    private parameterTracks:Array<ParameterTrack> = [];
 
 
 
@@ -37,7 +42,7 @@ class ParameterTable {
     drawParameter(trackContainerElement: HTMLElement, parameterName: number):void {
         var parameterTrackModel = this.parameterTrackModels[parameterName];
 
-        console.log('Model: ' + parameterTrackModel);
+        //console.log('Model: ' + parameterTrackModel);
 
         if (this.papers[parameterName] == undefined) {
             this.papers[parameterName] = Raphael(trackContainerElement, this.colWidth, this.colHeight);
@@ -48,11 +53,11 @@ class ParameterTable {
         this.parameterTracks[parameterName] = new ParameterTrack(parameterTrackModel, paper, 0, 0,
             this.colHeight,
             this.colWidth);
-        indexTrackMap[numberOfParameters] = parameterName;
-        ++numberOfParameters;
+        this.indexTrackMap[this.numberOfParameters] = parameterName;
+        ++this.numberOfParameters;
         this.parameterTrackHeaders[parameterName] = new ParameterTrackHeader(paper, parameterTrackModel);
 
-        render();
+        this.render();
     }
 
     //addParameterTrack(parameterName: string) {
@@ -62,26 +67,26 @@ class ParameterTable {
     //}
 
     setColumnWidths(widths: Array<number>) {
-        for (let counter = 0; counter < numberOfParameters; ++counter) {
-            var key = indexTrackMap[counter];
-            parameterTracks[key].setWidth(widths[counter]);
+        for (let counter = 0; counter < this.numberOfParameters; ++counter) {
+            var key = this.indexTrackMap[counter];
+            this.parameterTracks[key].setWidth(widths[counter]);
         }
-        render();
+        this.render();
     }
 
     setColumnHeights(heights: Array<number>) {
-        for (let counter = 0; counter < numberOfParameters; ++counter) {
-            var key = indexTrackMap[counter];
-            parameterTracks[key].setHeight(heights[counter]);
+        for (let counter = 0; counter < this.numberOfParameters; ++counter) {
+            var key = this.indexTrackMap[counter];
+            this.parameterTracks[key].setHeight(heights[counter]);
         }
-        render();
+        this.render();
     }
 
-    setColour(parameter, colour) {
-        for (var i = 0; i < parameterTracks.length; ++i) {
-            if (parameterTracks[i].getModel().getParameter() == parameter) {
-                parameterTracks[i].setColour(colour);
-                parameterTracks[i].render();
+    setColour(parameter:number, colour:string) {
+        for (var i = 0; i < this.parameterTracks.length; ++i) {
+            if (this.parameterTracks[i].getModel().getParameter() == parameter) {
+                this.parameterTracks[i].setColour(colour);
+                this.parameterTracks[i].render();
             }
         }
     }
@@ -90,7 +95,7 @@ class ParameterTable {
     redraw() {
         console.log('Redrawing');
         // TODO If nothing else needs to be done, render can be made public
-        render();
+        this.render();
     }
 
     updateColumnWidths() {
@@ -99,42 +104,42 @@ class ParameterTable {
             return;
         }
         var cumulativeWidth = 0;
-        var widthPerTrack = width / parameterTracks.length;
-        for (var i = 0; i < parameterTracks.length; ++i) {
+        var widthPerTrack = this.width / this.parameterTracks.length;
+        for (var i = 0; i < this.parameterTracks.length; ++i) {
 
             console.log('Setting offset: ' + cumulativeWidth);
 
-            parameterTracks[i].setXOffset(cumulativeWidth);
-            parameterTracks[i].setWidth(widthPerTrack);
+            this.parameterTracks[i].setXOffset(cumulativeWidth);
+            this.parameterTracks[i].setWidth(widthPerTrack);
 
 
-            parameterTrackHeaders[i].setDimensions(cumulativeWidth, 0, widthPerTrack, 0);
+            this.parameterTrackHeaders[i].setDimensions(cumulativeWidth, 0, widthPerTrack, 0);
             cumulativeWidth += widthPerTrack;
         }
     }
 
     render() {
-        console.log('Number of parameter tracks: ' + parameterTracks.length);
-        console.log('Number of parameter track models: ' + parameterTrackModels.length);
+        console.log('Number of parameter tracks: ' + this.parameterTracks.length);
+        console.log('Number of parameter track models: ' + this.parameterTrackModels.length);
 
-        for (var key in parameterTrackModels) {
-            parameterTrackModels[key].render();
+        for (var key in this.parameterTrackModels) {
+            this.parameterTrackModels[key].render();
         }
     }
 
-    calculateLayout():number {
-        if (parameterTracks.length == 0) {
-            return 0;
+    calculateLayout():Array<number> {
+        if (this.parameterTracks.length == 0) {
+            return [0];
         }
-        var widths = new Array(parameterTracks.length);
-        for (var i = 0; i < parameterTracks.length; ++i) {
-            widths[i] = width / parameterTracks.length;
+        var widths = new Array<number>(this.parameterTracks.length);
+        for (var i = 0; i < this.parameterTracks.length; ++i) {
+            widths[i] = this.width / this.parameterTracks.length;
         }
         return widths;
     }
 
     zoomIn():void {
-        dataModel.zoomIn();
+        this.dataModel.zoomIn();
     }
 
     zoomOut():void {

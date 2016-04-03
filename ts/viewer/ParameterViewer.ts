@@ -1,20 +1,19 @@
-///<reference path="DataModel.ts"/>
 import {Component} from "angular2/core";
-import {ParameterTable} from "./ParameterTable.js";
-
-
+import {ParameterTable} from "./ParameterTable";
+import {ParameterList} from "./ParameterList";
+import {Backend} from "../backend/Backend"
 
 
 @Component({
     selector: "parameter-viewer",
-    providers: [IBackend],
     templateUrl: "viewer/parameterViewer.html",
-    directives: [ParameterTable]
+    directives: [ParameterTable, ParameterList],
+    providers: [Backend]
 })
-class ParameterViewer {
+export class ParameterViewer {
 
 
-    constructor(private backend:IBackend) {
+    constructor(private backend:Backend) {
 
 
     }

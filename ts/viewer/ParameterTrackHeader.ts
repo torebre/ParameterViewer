@@ -1,3 +1,4 @@
+import {IParameterTrackModel} from "../backend/IParameterTrackModel";
 
 
 /**
@@ -28,7 +29,7 @@ export class ParameterTrackHeader {
 
 
         this.parameterName = this.raphaelPaper.text(this.myXOffset + this.xMargin, this.myYOffset + this.yMargin,
-            this.parameterTrackModel.getParameter());
+            this.parameterTrackModel.getParameterName());
         this.parameterName.attr({
             "font-size": 16,
             "font-family": "Arial, Helvetica, sans-serif"
