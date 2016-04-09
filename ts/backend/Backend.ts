@@ -1,4 +1,5 @@
 import {IBackend} from "./IBackend";
+import {ParameterInfo} from "./ParameterInfo";
 
 
 
@@ -35,6 +36,14 @@ export class Backend implements IBackend {
 
     getValue(parameter:number, start:number, stop:number):ValueSummary {
         return this.backend.getValue(parameter, start, stop);
+    }
+    
+    getParameters():Array<ParameterInfo> {
+        
+        // TODO
+        
+        return undefined;
+        
     }
 
 }
