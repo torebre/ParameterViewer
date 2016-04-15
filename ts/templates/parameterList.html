@@ -3,11 +3,9 @@ Search:
 
 
 <ul class="parameters">
-    <div *ngFor="var parameter of parameters">
-        <li class="parameter">
+        <li *ngFor="#parameter of parameters" class="parameter">
             <!--draggable="true" ng-attr-id="{{ 'parameter-' + parameter.name}}" ng-dblclick="parameterDblClick(parameter.name)" ng-repeat="parameter in parameters | filter: query" ondragstart="drag(event)">-->
             {{parameter.name}}
             <p>{{parameter.unit}}</p>
         </li>
-    </div>
 </ul>

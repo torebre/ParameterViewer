@@ -1,6 +1,7 @@
-//module Backend {
+import {ParameterInfo} from "./ParameterInfo";
 
-    export interface IBackend {
+
+export interface IBackend {
 
         getBlockLengthfunction():number
 
@@ -19,6 +20,10 @@
 // and stop values are integers that represent a range
 // of index points
         getValue(parameter:number, start:number, stop:number):ValueSummary
+
+        
+        getParameters():Array<ParameterInfo>;
+        
 
 //{
 //    var average = 0;

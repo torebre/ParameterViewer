@@ -1,11 +1,16 @@
 import {IBackend} from "./IBackend";
 import {ParameterInfo} from "./ParameterInfo";
+import {Injectable} from "angular2/core";
+import {DummyBackend} from "./DummyBackend";
 
 
 
+@Injectable()
 export class Backend implements IBackend {
+    private backend:IBackend = new DummyBackend();
 
-    constructor(private backend:IBackend) {
+    
+    constructor() {
 
     }
 
@@ -39,11 +44,7 @@ export class Backend implements IBackend {
     }
     
     getParameters():Array<ParameterInfo> {
-        
-        // TODO
-        
-        return undefined;
-        
+        return this.backend.getParameters();
     }
 
 }
