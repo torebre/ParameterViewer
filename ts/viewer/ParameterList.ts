@@ -2,17 +2,24 @@ import {Component, Input, Inject} from "angular2/core";
 import {Backend} from "../backend/Backend";
 import {ParameterInfo} from "../backend/ParameterInfo";
 
+// Only here for testing
+import {$WebSocket} from '../backend/SocketHandler';
+import {Observable} from "rxjs/Observable";
+// import Observable = Rx.Observable;
+
+
+
+
 
 
 @Component({
     selector: "parameter-list",
     templateUrl: "templates/parameterList.html",
-    // TODO Should probably not be defined here
-    providers: [Backend]
 })
 export class ParameterList {
     parameters:Array<ParameterInfo>;
     private searchText:string;
+
 
     // TODO Figure out why the Inject-annotation is needed here
     constructor(@Inject(Backend) private backend:Backend) {

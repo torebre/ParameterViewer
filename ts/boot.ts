@@ -3,4 +3,4 @@ import {ParameterViewer} from './viewer/ParameterViewer';
 import {DummyBackend} from "./backend/DummyBackend";
 
 
-bootstrap(ParameterViewer, [DummyBackend]).catch(err => console.error(err));
+// bootstrap(ParameterViewer, [DummyBackend]).catch(err => console.error(err));

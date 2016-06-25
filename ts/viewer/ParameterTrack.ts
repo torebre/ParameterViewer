@@ -2,41 +2,73 @@
  Draw parameter values inside a box defined by
  parameters given to the constructor.
  */
-import {Component} from "angular2/core";
+import {Component, Input} from "angular2/core";
 import {IParameterTrackModel} from "../backend/IParameterTrackModel";
+import {NgFor} from "angular2/common";
+
 
 
 @Component({
     selector: "parameter-track",
-    template: "<div (drop)='addParameter'</div>"
+    inputs: ['path'],
+    template: `<h2>Test3: {{parameter}}</h2>
+ <svg [viewBox]="getPath()"
+         preserveAspectRatio="xMidYMid meet">
+      <g style="stroke:#660000;">
+      <path [attr.d]="path"/>
+      </g>
+      
+      <!--<g stroke="green" fill="white" stroke-width="5">-->
+     <!--<circle cx="25" cy="25" r="15"/>-->
+     <!--<circle cx="40" cy="25" r="15"/>-->
+     <!--<circle cx="55" cy="25" r="15"/>-->
+     <!--<circle cx="70" cy="25" r="15"/>-->
+   <!--</g>-->
+   
+      </svg>
+`
+    // directives: [NgFor]
+    // template: "<div (drop)='addParameter'</div>"
+    // template: "<div (drop)='addParameter'>{{parameter}}<svg:rect x=\"0\" y=\"0\" width=\"100\" height=\"100\"/></div>"
 })
 export class ParameterTrack implements ParameterTrackModelListener {
     private colour: string = '#000000';
-    private path: string;
+    
+    // TODO Just setting the value for testing
+    path: string ="M50,50 A30,50 0 0,1 100,100";
+    
     private raphaelPath:RaphaelPath = undefined;
     private boundingBox:RaphaelElement = undefined;
     private line:RaphaelPath;
+    
+    parameter:string;
 
 
-    constructor(private parameterTrackModel:IParameterTrackModel,
-                private paper:RaphaelPaper,
-                private xOffset:number,
-                private yOffset:number,
-                private width:number,
-                private height:number) {
-        this.parameterTrackModel.addListener(this);
-    }
+    private parameterTrackModel:IParameterTrackModel;
+                private paper:RaphaelPaper;
+                private xOffset:number;
+                private yOffset:number;
+                private width:number;
+                private height:number;
 
 
     addBoundingBox():void {
         this.boundingBox = this.paper.rect(this.xOffset, this.yOffset, this.width, this.height);
         this.boundingBox.attr('stroke', this.colour);
     }
+    
+    setParmeter(parameter:string):void {
+        console.log("Setting parameter to: " +parameter);
+        
+        this.parameter = parameter;
+        
+    }
 
 
     onDrop($event:any):void {
         // TODO Try to not use any above
-
+        
+        console.log("Drop: " +$event);
 
     }
 
@@ -113,6 +145,10 @@ export class ParameterTrack implements ParameterTrackModelListener {
         }
         // console.log('SVG path: ' +svgPath);
         return svgPath;
+    }
+    
+    getPath():string {
+        return this.path;
     }
 
 }

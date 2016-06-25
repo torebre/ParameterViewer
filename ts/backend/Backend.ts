@@ -2,21 +2,23 @@ import {IBackend} from "./IBackend";
 import {ParameterInfo} from "./ParameterInfo";
 import {Injectable} from "angular2/core";
 import {DummyBackend} from "./DummyBackend";
-
+import {ParameterUpdateListener} from "./ParameterUpdateListener";
+import {SocketHandler} from "./SocketHandler";
 
 
 @Injectable()
 export class Backend implements IBackend {
     private backend:IBackend = new DummyBackend();
+    // private websocketConnection:SocketHandler = new SocketHandler(); 
 
-    
+
     constructor() {
 
     }
 
 
     getBlockLengthfunction():number {
-        return this.backend.getBlockLengthfunction();
+        return this.backend.getBlockLength();
     }
 
     getRangeStart():number {
@@ -42,9 +44,20 @@ export class Backend implements IBackend {
     getValue(parameter:number, start:number, stop:number):ValueSummary {
         return this.backend.getValue(parameter, start, stop);
     }
-    
+
     getParameters():Array<ParameterInfo> {
         return this.backend.getParameters();
     }
+
+    getBlockLength():number {
+        return undefined;
+    }
+
+    attachParameterUpdateCallback(parameterUpdateListener:ParameterUpdateListener):void {
+    }
+
+    removeParameterUpdateCallback(parameterUpdateListner:ParameterUpdateListener):void {
+    }
+
 
 }

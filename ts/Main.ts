@@ -3,9 +3,10 @@
 import {bootstrap} from 'angular2/platform/browser';
 import {ParameterList} from './viewer/ParameterList';
 import {AppComponent} from './AppComponent';
+import {ParameterViewer} from "./viewer/ParameterViewer";
 
 
 
-//bootstrap(AppComponent, []).catch(err => console.error(err));
+// bootstrap(ParameterList, []).catch(err => console.error(err));
 
-bootstrap(ParameterList, []).catch(err => console.error(err));
+bootstrap(ParameterViewer, []).catch(err => console.error(err));

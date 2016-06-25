@@ -1,16 +1,19 @@
-import {Component} from "angular2/core";
+import {Component, Inject, Input, OnInit} from "angular2/core";
 import {IBackend } from "../backend/IBackend";
 import {DataModel} from "../viewer/DataModel";
 import {ParameterTrack} from "../viewer/ParameterTrack";
 import {ParameterTrackHeader} from "../viewer/ParameterTrackHeader";
 import {IParameterTrackModel} from "../backend/IParameterTrackModel";
+import {Backend} from "../backend/Backend";
 
 
 @Component({
     selector: 'parameter-table',
-    templateUrl: '../templates/parameterTable.html',
+    templateUrl: 'templates/parameterTable.html',
+    directives: [ParameterTrack]
+    
 })
-export class ParameterTable {
+export class ParameterTable implements OnInit {
     private dataModel: DataModel;
     private parameterTrackModels:Array<IParameterTrackModel> = [];
     private parameterTrackHeaders:Array<ParameterTrackHeader> = [];
@@ -23,10 +26,17 @@ export class ParameterTable {
 
     private parameterTracks:Array<ParameterTrack> = [];
 
+    testTracks = ["Test1", "Test2", "Test3", "Test4"];
 
 
-    constructor(private colWidth: number, private colHeight: number, private backend: IBackend) {
-        this.dataModel = new DataModel(colHeight, backend);
+
+    // constructor(private colWidth: number, private colHeight: number, private backend: IBackend) {
+    //     this.dataModel = new DataModel(colHeight, backend);
+    // }
+
+    constructor(@Inject(Backend) private backend: Backend) {
+        // TODO Do not hardcode column height
+        this.dataModel = new DataModel(100, backend);
     }
 
     public updateMarkerLineForAllParameterTracks(yCoord: number):void {
@@ -171,6 +181,15 @@ export class ParameterTable {
     //    parameterViewer.addParameter(data.substr(10));
     //})
 //}
+
+
+    ngOnInit():any {
+        return this.getTracks();
+    }
+    
+    getTracks():Array<string> {
+        return this.testTracks;
+    }
 
 
 }

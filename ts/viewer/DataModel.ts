@@ -37,6 +37,7 @@ export class DataModel {
     constructor(private height:number, private backend:IBackend) {
         this.rangesStart = new Array<number>(height);
         this.rangesStop = new Array<number>(height);
+        this.listeners = new Array<IDataModelListener>();
 
         this.range = undefined;
         this.startIndex = undefined;

@@ -1,14 +1,20 @@
 import {IBackend} from "./IBackend";
 import {ParameterInfo} from "./ParameterInfo";
+import {ParameterUpdateListener} from "./ParameterUpdateListener";
 
 
 export class DummyBackend implements IBackend {
-    
-    getValue(parameter:number, start:number, stop:number):ValueSummary {
+    getBlockLength():number {
         return undefined;
     }
 
-    getBlockLengthfunction():number {
+    attachParameterUpdateCallback(parameterUpdateListener:ParameterUpdateListener):void {
+    }
+
+    removeParameterUpdateCallback(parameterUpdateListner:ParameterUpdateListener):void {
+    }
+    
+    getValue(parameter:number, start:number, stop:number):ValueSummary {
         return undefined;
     }
 
