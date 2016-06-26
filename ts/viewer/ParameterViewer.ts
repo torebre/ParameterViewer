@@ -2,6 +2,7 @@ import {Component} from "angular2/core";
 import {ParameterTable} from "./ParameterTable";
 import {ParameterList} from "./ParameterList";
 import {Backend} from "../backend/Backend"
+import {PaintManager} from "./PaintManager";
 
 
 /**
@@ -12,7 +13,7 @@ import {Backend} from "../backend/Backend"
     selector: "parameter-viewer",
     templateUrl: "templates/parameterViewer.html",
     directives: [ParameterTable, ParameterList],
-    providers: [Backend]
+    providers: [Backend, PaintManager]
 })
 export class ParameterViewer {
     

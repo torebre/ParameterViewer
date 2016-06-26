@@ -1,5 +1,4 @@
-import {Component, Inject, Input, OnInit} from "angular2/core";
-import {IBackend } from "../backend/IBackend";
+import {Component, Inject, Input, OnInit, ElementRef} from "angular2/core";
 import {DataModel} from "../viewer/DataModel";
 import {ParameterTrack} from "../viewer/ParameterTrack";
 import {ParameterTrackHeader} from "../viewer/ParameterTrackHeader";
@@ -17,17 +16,13 @@ export class ParameterTable implements OnInit {
     private dataModel: DataModel;
     private parameterTrackModels:Array<IParameterTrackModel> = [];
     private parameterTrackHeaders:Array<ParameterTrackHeader> = [];
-    private papers:Array<RaphaelPaper> = [];
     private indexTrackMap:Array<number> = [];
     private numberOfParameters = 0;
 
     // The width needs to come from somewhere, and probably should not be specified here
     private width:number = 800;
 
-    private parameterTracks:Array<ParameterTrack> = [];
-
-    testTracks = ["Test1", "Test2", "Test3", "Test4"];
-
+    parameters:Array<ParameterTrack> = [];
 
 
     // constructor(private colWidth: number, private colHeight: number, private backend: IBackend) {
@@ -37,6 +32,15 @@ export class ParameterTable implements OnInit {
     constructor(@Inject(Backend) private backend: Backend) {
         // TODO Do not hardcode column height
         this.dataModel = new DataModel(100, backend);
+        
+        // TODO Just adding some tracks for testing here
+        var track = new ParameterTrack();
+        track.setParameter("Test1");
+        this.parameters.push(track);
+        var track2 = new ParameterTrack();
+        track2.setParameter("Test2");
+        this.parameters.push(track2);
+        
     }
 
     public updateMarkerLineForAllParameterTracks(yCoord: number):void {
@@ -49,32 +53,27 @@ export class ParameterTable implements OnInit {
         delete this.parameterTrackModels[parameter];
     }
 
-    drawParameter(trackContainerElement: HTMLElement, parameterName: number):void {
-        var parameterTrackModel = this.parameterTrackModels[parameterName];
+    // drawParameter(trackContainerElement: HTMLElement, parameterName: number):void {
+    //     var parameterTrackModel = this.parameterTrackModels[parameterName];
+    //
+    //     //console.log('Model: ' + parameterTrackModel);
+    //
+    //     if (this.papers[parameterName] == undefined) {
+    //         this.papers[parameterName] = Raphael(trackContainerElement, this.colWidth, this.colHeight);
+    //     }
+    //     var paper = Raphael(trackContainerElement, this.colWidth, this.colHeight);
+    //     // TODO Need to figure out the life cycle of the papers, and then
+    //     // delete the old parameter tracks attached to the old papers
+    //     this.parameterTracks[parameterName] = new ParameterTrack(parameterTrackModel, paper, 0, 0,
+    //         this.colHeight,
+    //         this.colWidth);
+    //     this.indexTrackMap[this.numberOfParameters] = parameterName;
+    //     ++this.numberOfParameters;
+    //     this.parameterTrackHeaders[parameterName] = new ParameterTrackHeader(paper, parameterTrackModel);
+    //
+    //     this.render();
+    // }
 
-        //console.log('Model: ' + parameterTrackModel);
-
-        if (this.papers[parameterName] == undefined) {
-            this.papers[parameterName] = Raphael(trackContainerElement, this.colWidth, this.colHeight);
-        }
-        var paper = Raphael(trackContainerElement, this.colWidth, this.colHeight);
-        // TODO Need to figure out the life cycle of the papers, and then
-        // delete the old parameter tracks attached to the old papers
-        this.parameterTracks[parameterName] = new ParameterTrack(parameterTrackModel, paper, 0, 0,
-            this.colHeight,
-            this.colWidth);
-        this.indexTrackMap[this.numberOfParameters] = parameterName;
-        ++this.numberOfParameters;
-        this.parameterTrackHeaders[parameterName] = new ParameterTrackHeader(paper, parameterTrackModel);
-
-        this.render();
-    }
-
-    //addParameterTrack(parameterName: string) {
-    //    console.log('Adding track: ' + parameterName + '. Length: ' + parameterTrackModels.length);
-    //    parameterTrackModels[parameterName] = new ParameterTrackModel(parameterName, dataModel);
-    //    console.log('Length after update: ' + parameterTrackModels.length);
-    //}
 
     setColumnWidths(widths: Array<number>) {
         for (let counter = 0; counter < this.numberOfParameters; ++counter) {

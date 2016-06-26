@@ -11,17 +11,17 @@
     <thead>
     <tr>
         <!--<template ngFor let-parameter [ngForOf]="testTracks">-->
-        <th *ngFor="let parameter of testTracks">
+        <th *ngFor="let parameter of parameters">
             <!--<th>-->
-            Parameter: {{parameter}}
+            Parameter: {{parameter.parameter}}
             </th>
         <!--</th>-->
     <tr>
     </thead>
     <tr>
-        <template ngFor let-parameter [ngForOf]="testTracks">
+        <template ngFor let-parameter [ngForOf]="parameters">
             <td>
-                <parameter-track [parameter]="parameter"></parameter-track>
+                <parameter-track [parameter]="parameter.parameter"></parameter-track>
             </td>
         </template>
     </tr>

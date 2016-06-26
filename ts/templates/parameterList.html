@@ -3,7 +3,7 @@ Search:
 
 
 <ul class="parameters">
-        <li *ngFor="#parameter of parameters" class="parameter">
+        <li *ngFor="let parameter of parameters" class="parameter">
             <!--draggable="true" ng-attr-id="{{ 'parameter-' + parameter.name}}" ng-dblclick="parameterDblClick(parameter.name)" ng-repeat="parameter in parameters | filter: query" ondragstart="drag(event)">-->
             {{parameter.name}}
             <p>{{parameter.unit}}</p>

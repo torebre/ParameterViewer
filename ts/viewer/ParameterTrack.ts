@@ -2,73 +2,78 @@
  Draw parameter values inside a box defined by
  parameters given to the constructor.
  */
-import {Component, Input} from "angular2/core";
+import {Component, Input, Inject, ElementRef} from "angular2/core";
 import {IParameterTrackModel} from "../backend/IParameterTrackModel";
 import {NgFor} from "angular2/common";
-
+import {PaintManager} from "./PaintManager";
 
 
 @Component({
     selector: "parameter-track",
-    inputs: ['path'],
-    template: `<h2>Test3: {{parameter}}</h2>
- <svg [viewBox]="getPath()"
-         preserveAspectRatio="xMidYMid meet">
-      <g style="stroke:#660000;">
-      <path [attr.d]="path"/>
-      </g>
-      
-      <!--<g stroke="green" fill="white" stroke-width="5">-->
-     <!--<circle cx="25" cy="25" r="15"/>-->
-     <!--<circle cx="40" cy="25" r="15"/>-->
-     <!--<circle cx="55" cy="25" r="15"/>-->
-     <!--<circle cx="70" cy="25" r="15"/>-->
-   <!--</g>-->
-   
-      </svg>
-`
-    // directives: [NgFor]
-    // template: "<div (drop)='addParameter'</div>"
-    // template: "<div (drop)='addParameter'>{{parameter}}<svg:rect x=\"0\" y=\"0\" width=\"100\" height=\"100\"/></div>"
+    template: `
+        <h2>Test3: {{parameter}}</h2>
+        <svg [viewBox]="viewBox" [width]="width">
+        <g style="stroke:#660000;">
+        <path [attr.d]="getPath()"/>
+        </g>
+        </svg>
+    `
 })
 export class ParameterTrack implements ParameterTrackModelListener {
-    private colour: string = '#000000';
-    
+    private colour:string = '#000000';
+
     // TODO Just setting the value for testing
-    path: string ="M50,50 A30,50 0 0,1 100,100";
-    
-    private raphaelPath:RaphaelPath = undefined;
-    private boundingBox:RaphaelElement = undefined;
-    private line:RaphaelPath;
-    
-    parameter:string;
+    // path:string; // = "M50,50 A30,50 0 0,1 100,100";
+
+    trackWidth:number = 300;
+
+    width:string = "5cm";
+    // height:string = "10cm";
+
+    viewBox:string = "0 0 100 500";
+
+
+    // @Inject(ElementRef) private elementRef:ElementRef;
+
+    // TODO Figure out exactly what the Input-annotation does
+    @Input() parameter:string;
+
+
+    constructor(@Inject(PaintManager) private paintManager:PaintManager) {
+        
+        console.log("Paint manager: " +paintManager);
+
+
+    }
+
+
+    public setParameter(parameter:string):void {
+        console.log("Parameter: " + parameter);
+
+        if ("Test2".match(parameter)) {
+            console.log("Test10");
+            this.width = "10cm";
+        }
+        this.parameter = parameter;
+
+    }
 
 
     private parameterTrackModel:IParameterTrackModel;
-                private paper:RaphaelPaper;
-                private xOffset:number;
-                private yOffset:number;
-                private width:number;
-                private height:number;
+    private xOffset:number;
+    private yOffset:number;
 
 
     addBoundingBox():void {
-        this.boundingBox = this.paper.rect(this.xOffset, this.yOffset, this.width, this.height);
-        this.boundingBox.attr('stroke', this.colour);
-    }
-    
-    setParmeter(parameter:string):void {
-        console.log("Setting parameter to: " +parameter);
-        
-        this.parameter = parameter;
-        
+
+
     }
 
 
     onDrop($event:any):void {
         // TODO Try to not use any above
-        
-        console.log("Drop: " +$event);
+
+        console.log("Drop: " + $event);
 
     }
 
@@ -77,15 +82,7 @@ export class ParameterTrack implements ParameterTrackModelListener {
      not be drawn
      **/
     markerLineUpdated():void {
-        if(this.line !== undefined) {
-            this.line.remove();
-        }
-        //if(this.yCoord < 0) {
-        //    return;
-        //}
-        this.line = this.paper.path('M' +this.xOffset +',' +this.yOffset +"h" +this.width);
-        // TODO Colour just for testing
-        this.line.attr('stroke', 'blue');
+
     }
 
     getModel():IParameterTrackModel {
@@ -97,29 +94,25 @@ export class ParameterTrack implements ParameterTrackModelListener {
     }
 
     render():void {
-        if(this.raphaelPath !== undefined) {
-            this.raphaelPath.remove();
-            this.boundingBox.remove();
-        }
         this.addBoundingBox();
         var coordinates = this.parameterTrackModel.getParameterPath();
         var path:string = this.generateFullSvgPath(coordinates);
-        this.raphaelPath = this.paper.path(path);
-        this.raphaelPath.attr('stroke', this.colour);
+
+
     }
 
-    setHeight(newHeight: number) {
-        console.log("Setting height for track: " +newHeight);
-        this.paper.setSize(this.width, newHeight);
+    setHeight(newHeight:number) {
+        console.log("Setting height for track: " + newHeight);
+
         this.height = newHeight;
     }
 
-    setWidth(newWidth: number):void {
-        this.paper.setSize(newWidth, this.height);
+    setWidth(newWidth:number):void {
+
         this.width = newWidth;
     }
 
-    setXOffset(xOffset: number):void {
+    setXOffset(xOffset:number):void {
         this.xOffset = xOffset;
     }
 
@@ -146,9 +139,10 @@ export class ParameterTrack implements ParameterTrackModelListener {
         // console.log('SVG path: ' +svgPath);
         return svgPath;
     }
-    
+
     getPath():string {
-        return this.path;
+        return this.paintManager.getSvgPathForParameter(this.parameter);
+        // return this.path;
     }
 
 }
