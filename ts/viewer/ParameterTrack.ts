@@ -11,8 +11,9 @@ import {PaintManager} from "./PaintManager";
 @Component({
     selector: "parameter-track",
     template: `
-        <h2>Test3: {{parameter}}</h2>
-        <svg [viewBox]="viewBox" [width]="width">
+        <svg [viewBox]="viewBox"
+         [width]="width"
+        preserveAspectRatio="xMidYMid meet">
         <g style="stroke:#660000;">
         <path [attr.d]="getPath()"/>
         </g>
@@ -25,7 +26,7 @@ export class ParameterTrack implements ParameterTrackModelListener {
     // TODO Just setting the value for testing
     // path:string; // = "M50,50 A30,50 0 0,1 100,100";
 
-    trackWidth:number = 300;
+    // trackWidth:number = 300;
 
     width:string = "5cm";
     // height:string = "10cm";

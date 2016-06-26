@@ -10,18 +10,16 @@
 <table id="parameter-view-table" parameter-table>
     <thead>
     <tr>
-        <!--<template ngFor let-parameter [ngForOf]="testTracks">-->
+        <!--<templae ngFor let-parameter [ngForOf]="testTracks">-->
         <th *ngFor="let parameter of parameters">
-            <!--<th>-->
-            Parameter: {{parameter.parameter}}
-            </th>
-        <!--</th>-->
+            <h3>{{parameter.name}} ({{parameter.unit}})</h3>
+        </th>
     <tr>
     </thead>
     <tr>
         <template ngFor let-parameter [ngForOf]="parameters">
             <td>
-                <parameter-track [parameter]="parameter.parameter"></parameter-track>
+                <parameter-track [parameter]="parameter"></parameter-track>
             </td>
         </template>
     </tr>

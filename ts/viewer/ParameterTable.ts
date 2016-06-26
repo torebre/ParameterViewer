@@ -4,6 +4,7 @@ import {ParameterTrack} from "../viewer/ParameterTrack";
 import {ParameterTrackHeader} from "../viewer/ParameterTrackHeader";
 import {IParameterTrackModel} from "../backend/IParameterTrackModel";
 import {Backend} from "../backend/Backend";
+import {ParameterInfo} from "../backend/ParameterInfo";
 
 
 @Component({
@@ -19,10 +20,9 @@ export class ParameterTable implements OnInit {
     private indexTrackMap:Array<number> = [];
     private numberOfParameters = 0;
 
-    // The width needs to come from somewhere, and probably should not be specified here
-    private width:number = 800;
+    parameters:Array<ParameterInfo> = [];
 
-    parameters:Array<ParameterTrack> = [];
+    
 
 
     // constructor(private colWidth: number, private colHeight: number, private backend: IBackend) {
@@ -33,13 +33,11 @@ export class ParameterTable implements OnInit {
         // TODO Do not hardcode column height
         this.dataModel = new DataModel(100, backend);
         
-        // TODO Just adding some tracks for testing here
-        var track = new ParameterTrack();
-        track.setParameter("Test1");
-        this.parameters.push(track);
-        var track2 = new ParameterTrack();
-        track2.setParameter("Test2");
-        this.parameters.push(track2);
+        // TODO Just here for testing
+        var parameterInfo = new ParameterInfo("Test1", "test");
+        this.parameters.push(parameterInfo);
+        var parameterInfo2 = new ParameterInfo("Test2", "test");
+        this.parameters.push(parameterInfo);
         
     }
 
@@ -61,7 +59,7 @@ export class ParameterTable implements OnInit {
     //     if (this.papers[parameterName] == undefined) {
     //         this.papers[parameterName] = Raphael(trackContainerElement, this.colWidth, this.colHeight);
     //     }
-    //     var paper = Raphael(trackContainerElement, this.colWidth, this.colHeight);
+    //     var paper = Raphael(trackContai-nerElement, this.colWidth, this.colHeight);
     //     // TODO Need to figure out the life cycle of the papers, and then
     //     // delete the old parameter tracks attached to the old papers
     //     this.parameterTracks[parameterName] = new ParameterTrack(parameterTrackModel, paper, 0, 0,
