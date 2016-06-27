@@ -7,10 +7,9 @@
 -->
 
 
-<table id="parameter-view-table" parameter-table>
+<table id="parameter-view-table" cellpadding="0" cellspacing="0">
     <thead>
     <tr>
-        <!--<templae ngFor let-parameter [ngForOf]="testTracks">-->
         <th *ngFor="let parameter of parameters">
             <h3>{{parameter.name}} ({{parameter.unit}})</h3>
         </th>
@@ -24,7 +23,6 @@
         </template>
     </tr>
 </table>
-
 
 <!--
 <template ngFor let-item [ngForOf]="testTracks" [ngForTrackBy]="trackBy">
