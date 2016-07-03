@@ -14,18 +14,16 @@ export class Backend implements IBackend {
 
 
     constructor(@Inject(APP_CONFIG) private config:Config) {
-        
-        console.log("Web socket end point: " +config.WEB_SOCKET_ENDPOINT);
-        
         this.websocketConnection = new SocketHandler(config.WEB_SOCKET_ENDPOINT);
-// this.websocketConnection.connect();
-        
+        this.websocketConnection.connect();
+
         this.websocketConnection.getDataStream().subscribe(data => {
-           console.log("Got data: " +data[1]);
-        },
-        error => {
-            console.log("Error");
-        });
+                console.log("Got data from: " + data.origin);
+                console.log("Message data: " + data.data);
+            },
+            error => {
+                console.log("Error");
+            });
     }
 
 
