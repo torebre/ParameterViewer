@@ -3,6 +3,7 @@ import {ParameterTable} from "./ParameterTable";
 import {ParameterList} from "./ParameterList";
 import {Backend} from "../backend/Backend"
 import {PaintManager} from "./PaintManager";
+import {DataModel} from "./DataModel";
 
 
 /**
@@ -13,7 +14,8 @@ import {PaintManager} from "./PaintManager";
     selector: "parameter-viewer",
     templateUrl: "templates/parameterViewer.html",
     directives: [ParameterTable, ParameterList],
-    providers: [Backend, PaintManager]
+    // TODO Can some of these providers be removed?
+    providers: [Backend, PaintManager, DataModel]
 })
 export class ParameterViewer {
     

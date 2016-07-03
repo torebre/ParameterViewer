@@ -1,19 +1,31 @@
 import {IBackend} from "./IBackend";
 import {ParameterInfo} from "./ParameterInfo";
-import {Injectable} from "angular2/core";
+import {Injectable, Inject} from "angular2/core";
 import {DummyBackend} from "./DummyBackend";
 import {ParameterUpdateListener} from "./ParameterUpdateListener";
 import {SocketHandler} from "./SocketHandler";
+import {APP_CONFIG, Config} from "../Config";
 
 
 @Injectable()
 export class Backend implements IBackend {
     private backend:IBackend = new DummyBackend();
-    // private websocketConnection:SocketHandler = new SocketHandler(); 
+    private websocketConnection:SocketHandler;
 
 
-    constructor() {
-
+    constructor(@Inject(APP_CONFIG) private config:Config) {
+        
+        console.log("Web socket end point: " +config.WEB_SOCKET_ENDPOINT);
+        
+        this.websocketConnection = new SocketHandler(config.WEB_SOCKET_ENDPOINT);
+// this.websocketConnection.connect();
+        
+        this.websocketConnection.getDataStream().subscribe(data => {
+           console.log("Got data: " +data[1]);
+        },
+        error => {
+            console.log("Error");
+        });
     }
 
 

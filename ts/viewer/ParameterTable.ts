@@ -14,24 +14,18 @@ import {ParameterInfo} from "../backend/ParameterInfo";
     
 })
 export class ParameterTable implements OnInit {
-    private dataModel: DataModel;
     private parameterTrackModels:Array<IParameterTrackModel> = [];
     private parameterTrackHeaders:Array<ParameterTrackHeader> = [];
     private indexTrackMap:Array<number> = [];
     private numberOfParameters = 0;
 
+    feed:string;
     parameters:Array<ParameterInfo> = [];
 
     
 
-
-    // constructor(private colWidth: number, private colHeight: number, private backend: IBackend) {
-    //     this.dataModel = new DataModel(colHeight, backend);
-    // }
-
-    constructor(@Inject(Backend) private backend: Backend) {
-        // TODO Do not hardcode column height
-        this.dataModel = new DataModel(100, backend);
+    constructor(@Inject(DataModel) private dataModel:DataModel) {
+        this.feed = dataModel.getFeedName();
         
         // TODO Just here for testing
         var parameterInfo = new ParameterInfo("Test1", "test");

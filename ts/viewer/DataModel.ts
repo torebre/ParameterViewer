@@ -6,7 +6,11 @@
  - of data values in a pixel.
  */
 import {IBackend} from "../backend/IBackend";
+import {Injectable, Inject} from "angular2/core";
+import {Backend} from "../backend/Backend";
 
+
+@Injectable()
 export class DataModel {
     public static get ZOOM_LEVEL_MAX():number {
         return 10;
@@ -34,7 +38,7 @@ export class DataModel {
     // The index needs to know the height (number of pixels)
     // available for painting in order to lay out the
     // values on the y-axis
-    constructor(private height:number, private backend:IBackend) {
+    constructor(@Inject(Backend) private backend:Backend, private height:number = 10) {
         this.rangesStart = new Array<number>(height);
         this.rangesStop = new Array<number>(height);
         this.listeners = new Array<IDataModelListener>();
@@ -276,5 +280,10 @@ export class DataModel {
     //}
 
 
+    getFeedName():string {
+        // TODO Just return a test name for now
+        return "Test name";
+    }
+    
 }
 
