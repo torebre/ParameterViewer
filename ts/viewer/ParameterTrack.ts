@@ -8,6 +8,8 @@ import {NgFor} from "angular2/common";
 import {PaintManager} from "./PaintManager";
 
 
+
+
 @Component({
     selector: "parameter-track",
     template: `
@@ -23,13 +25,7 @@ import {PaintManager} from "./PaintManager";
 export class ParameterTrack implements ParameterTrackModelListener {
     private colour:string = '#000000';
 
-    // TODO Just setting the value for testing
-    // path:string; // = "M50,50 A30,50 0 0,1 100,100";
-
-    // trackWidth:number = 300;
-
     width:string = "5cm";
-    // height:string = "10cm";
 
     viewBox:string = "0 0 100 500";
 
