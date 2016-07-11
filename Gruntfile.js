@@ -58,7 +58,7 @@ module.exports = function(grunt) {
                 // you run `grunt wiredep`
                 src: [
                     'build/ngApp2.html',
-                    'build/parameterList.html'
+                    'build/index.html'
                 ]
             }
         }

@@ -7,7 +7,7 @@ export interface Config {
 
 
 export const MY_CONFIG: Config = {
-    WEB_SOCKET_ENDPOINT: 'http://localhost:9000/echo'
+    WEB_SOCKET_ENDPOINT: 'ws://localhost:9000/echo'
 };
 
 

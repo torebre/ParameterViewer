@@ -17,7 +17,6 @@
     "tests"
   ],
   "dependencies": {
-    "raphael": "~2.1.4",
     "angular2-build": "~2.0.0-alpha.34"
   }
 }

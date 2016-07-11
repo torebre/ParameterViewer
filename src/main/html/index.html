@@ -25,28 +25,12 @@
 
     <script>
         System.config({
-//            baseURL: 'ts_out',
-
-//        packages: {
-//            app: {
-//                format: 'register',
-//                defaultExtension: 'js'
-//            }
-//        }
-
-//            map: {
-//                app : 'ts_out'
-//            }
-
             packages: {
                 ts_out: {
                     format: 'register',
                     defaultExtension: 'js'
                 }
             }
-
-
-
         });
         System.import('ts_out/Main').then(null, console.error.bind(console));
     </script>

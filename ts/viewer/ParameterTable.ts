@@ -1,9 +1,8 @@
-import {Component, Inject, Input, OnInit, ElementRef} from "angular2/core";
+import {Component, Inject, OnInit} from "angular2/core";
 import {DataModel} from "../viewer/DataModel";
 import {ParameterTrack} from "../viewer/ParameterTrack";
 import {ParameterTrackHeader} from "../viewer/ParameterTrackHeader";
 import {IParameterTrackModel} from "../backend/IParameterTrackModel";
-import {Backend} from "../backend/Backend";
 import {ParameterInfo} from "../backend/ParameterInfo";
 
 
@@ -67,77 +66,77 @@ export class ParameterTable implements OnInit {
     // }
 
 
-    setColumnWidths(widths: Array<number>) {
-        for (let counter = 0; counter < this.numberOfParameters; ++counter) {
-            var key = this.indexTrackMap[counter];
-            this.parameterTracks[key].setWidth(widths[counter]);
-        }
-        this.render();
-    }
-
-    setColumnHeights(heights: Array<number>) {
-        for (let counter = 0; counter < this.numberOfParameters; ++counter) {
-            var key = this.indexTrackMap[counter];
-            this.parameterTracks[key].setHeight(heights[counter]);
-        }
-        this.render();
-    }
-
-    setColour(parameter:number, colour:string) {
-        for (var i = 0; i < this.parameterTracks.length; ++i) {
-            if (this.parameterTracks[i].getModel().getParameter() == parameter) {
-                this.parameterTracks[i].setColour(colour);
-                this.parameterTracks[i].render();
-            }
-        }
-    }
-
-
-    redraw() {
-        console.log('Redrawing');
-        // TODO If nothing else needs to be done, render can be made public
-        this.render();
-    }
-
-    updateColumnWidths() {
-        // TODO For now just give all the columns the same width
-        if (this.parameterTracks.length == 0) {
-            return;
-        }
-        var cumulativeWidth = 0;
-        var widthPerTrack = this.width / this.parameterTracks.length;
-        for (var i = 0; i < this.parameterTracks.length; ++i) {
-
-            console.log('Setting offset: ' + cumulativeWidth);
-
-            this.parameterTracks[i].setXOffset(cumulativeWidth);
-            this.parameterTracks[i].setWidth(widthPerTrack);
-
-
-            this.parameterTrackHeaders[i].setDimensions(cumulativeWidth, 0, widthPerTrack, 0);
-            cumulativeWidth += widthPerTrack;
-        }
-    }
-
-    render() {
-        console.log('Number of parameter tracks: ' + this.parameterTracks.length);
-        console.log('Number of parameter track models: ' + this.parameterTrackModels.length);
-
-        for (var key in this.parameterTrackModels) {
-            this.parameterTrackModels[key].render();
-        }
-    }
-
-    calculateLayout():Array<number> {
-        if (this.parameterTracks.length == 0) {
-            return [0];
-        }
-        var widths = new Array<number>(this.parameterTracks.length);
-        for (var i = 0; i < this.parameterTracks.length; ++i) {
-            widths[i] = this.width / this.parameterTracks.length;
-        }
-        return widths;
-    }
+    // setColumnWidths(widths: Array<number>) {
+    //     for (let counter = 0; counter < this.numberOfParameters; ++counter) {
+    //         var key = this.indexTrackMap[counter];
+    //         this.parameterTracks[key].setWidth(widths[counter]);
+    //     }
+    //     this.render();
+    // }
+    //
+    // setColumnHeights(heights: Array<number>) {
+    //     for (let counter = 0; counter < this.numberOfParameters; ++counter) {
+    //         var key = this.indexTrackMap[counter];
+    //         this.parameterTracks[key].setHeight(heights[counter]);
+    //     }
+    //     this.render();
+    // }
+    //
+    // setColour(parameter:number, colour:string) {
+    //     for (var i = 0; i < this.parameterTracks.length; ++i) {
+    //         if (this.parameterTracks[i].getModel().getParameter() == parameter) {
+    //             this.parameterTracks[i].setColour(colour);
+    //             this.parameterTracks[i].render();
+    //         }
+    //     }
+    // }
+    //
+    //
+    // redraw() {
+    //     console.log('Redrawing');
+    //     // TODO If nothing else needs to be done, render can be made public
+    //     this.render();
+    // }
+    //
+    // updateColumnWidths() {
+    //     // TODO For now just give all the columns the same width
+    //     if (this.parameterTracks.length == 0) {
+    //         return;
+    //     }
+    //     var cumulativeWidth = 0;
+    //     var widthPerTrack = this.width / this.parameterTracks.length;
+    //     for (var i = 0; i < this.parameterTracks.length; ++i) {
+    //
+    //         console.log('Setting offset: ' + cumulativeWidth);
+    //
+    //         this.parameterTracks[i].setXOffset(cumulativeWidth);
+    //         this.parameterTracks[i].setWidth(widthPerTrack);
+    //
+    //
+    //         this.parameterTrackHeaders[i].setDimensions(cumulativeWidth, 0, widthPerTrack, 0);
+    //         cumulativeWidth += widthPerTrack;
+    //     }
+    // }
+    //
+    // render() {
+    //     console.log('Number of parameter tracks: ' + this.parameterTracks.length);
+    //     console.log('Number of parameter track models: ' + this.parameterTrackModels.length);
+    //
+    //     for (var key in this.parameterTrackModels) {
+    //         this.parameterTrackModels[key].render();
+    //     }
+    // }
+    //
+    // calculateLayout():Array<number> {
+    //     if (this.parameterTracks.length == 0) {
+    //         return [0];
+    //     }
+    //     var widths = new Array<number>(this.parameterTracks.length);
+    //     for (var i = 0; i < this.parameterTracks.length; ++i) {
+    //         widths[i] = this.width / this.parameterTracks.length;
+    //     }
+    //     return widths;
+    // }
 
     zoomIn():void {
         this.dataModel.zoomIn();
@@ -174,13 +173,13 @@ export class ParameterTable implements OnInit {
 //}
 
 
-    ngOnInit():any {
-        return this.getTracks();
-    }
-    
-    getTracks():Array<string> {
-        return this.testTracks;
-    }
+    // ngOnInit():any {
+    //     return this.getTracks();
+    // }
+    //
+    // getTracks():Array<string> {
+    //     return this.testTracks;
+    // }
 
 
 }
