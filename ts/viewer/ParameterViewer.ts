@@ -1,4 +1,4 @@
-import {Component} from "angular2/core";
+import {Component} from "@angular/core";
 import {ParameterTable} from "./ParameterTable";
 import {ParameterList} from "./ParameterList";
 import {Backend} from "../backend/Backend"

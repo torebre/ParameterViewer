@@ -1,6 +1,6 @@
 import {IBackend} from "./IBackend";
 import {ParameterInfo} from "./ParameterInfo";
-import {Injectable, Inject} from "angular2/core";
+import {Injectable, Inject} from "@angular/core";
 import {DummyBackend} from "./DummyBackend";
 import {ParameterUpdateListener} from "./ParameterUpdateListener";
 import {SocketHandler} from "./SocketHandler";

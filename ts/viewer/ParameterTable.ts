@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from "angular2/core";
+import {Component, Inject, OnInit} from "@angular/core";
 import {DataModel} from "../viewer/DataModel";
 import {ParameterTrack} from "../viewer/ParameterTrack";
 import {ParameterTrackHeader} from "../viewer/ParameterTrackHeader";

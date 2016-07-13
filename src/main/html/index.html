@@ -6,14 +6,17 @@
     <link rel="stylesheet" type="text/css" href="app.css">
 
 
-    <script src="../node_modules/angular2/bundles/angular2-polyfills.js"></script>
-    <script src="../node_modules/systemjs/dist/system.src.js"></script>
+    <!--<script src="../node_modules/angular2/bundles/angular2-polyfills.js"></script>-->
+    <!--<script src="../node_modules/systemjs/dist/system.src.js"></script>-->
 
-    <script src="../node_modules/rxjs/bundles/Rx.js"></script>
+    <!--<script src="../node_modules/rxjs/bundles/Rx.js"></script>-->
 
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.18.4/system.js"></script>-->
+    <!--<script src="../node_modules/angular2/bundles/angular2.dev.js"></script>-->
 
-    <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="../node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="../node_modules/zone.js/dist/zone.js"></script>
+    <script src="https://code.angularjs.org/tools/system.js"></script>
+    <script src="https://code.angularjs.org/2.0.0-beta.16/Rx.js"></script>
 
     <!-- TODO Should jQuery be included here? -->
     <!-- <script type="text/javascript" src="http://codeorigin.jquery.com/jquery-1.10.2.min.js"></script> -->
@@ -33,6 +36,14 @@
             }
         });
         System.import('ts_out/Main').then(null, console.error.bind(console));
+
+//        System.import('system-config.js').then(function () {
+//            System.import('ts_out/Main.js');
+//        }).catch(function(err) {
+//            console.log('error while importing:');
+//            console.log(err);
+//            console.log(err.stack);
+//        });
     </script>
 
 

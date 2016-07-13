@@ -1,5 +1,5 @@
 import {Backend} from "../backend/Backend";
-import {Injectable} from "angular2/core";
+import {Injectable} from "@angular/core";
 import {IBackend} from "../backend/IBackend";
 
 
@@ -7,7 +7,7 @@ import {IBackend} from "../backend/IBackend";
 export class PaintManager {
 
 
-    constructor(private backend:IBackend) {
+    constructor(private backend:Backend) {
 
 
 
@@ -30,25 +30,25 @@ export class PaintManager {
     }
 
 
-    generateFullSvgPath(coordinates:Array<ValueSummary>):string {
-        var svgPath = "M " + this.xOffset + " " + this.yOffset;
-        var skipRows = 0;
-        var parameterRangeMin = this.parameterTrackModel.getMin();
-        var parameterRangeMax = this.parameterTrackModel.getMax();
-
-        for (var row = 0; row < this.height; ++row) {
-            if (coordinates[row]) {
-                var scaledAverage = this.scaleValue(coordinates[row].average, parameterRangeMin, parameterRangeMax);
-                // TODO Use relative path instead?
-                svgPath += "L" + (this.xOffset + scaledAverage) + ', ' + (this.yOffset + row);
-                skipRows = 0;
-            } else {
-                skipRows++;
-            }
-        }
-        // console.log('SVG path: ' +svgPath);
-        return svgPath;
-    }
+    // generateFullSvgPath(coordinates:Array<ValueSummary>):string {
+    //     var svgPath = "M " + this.xOffset + " " + this.yOffset;
+    //     var skipRows = 0;
+    //     var parameterRangeMin = this.parameterTrackModel.getMin();
+    //     var parameterRangeMax = this.parameterTrackModel.getMax();
+    //
+    //     for (var row = 0; row < this.height; ++row) {
+    //         if (coordinates[row]) {
+    //             var scaledAverage = this.scaleValue(coordinates[row].average, parameterRangeMin, parameterRangeMax);
+    //             // TODO Use relative path instead?
+    //             svgPath += "L" + (this.xOffset + scaledAverage) + ', ' + (this.yOffset + row);
+    //             skipRows = 0;
+    //         } else {
+    //             skipRows++;
+    //         }
+    //     }
+    //     // console.log('SVG path: ' +svgPath);
+    //     return svgPath;
+    // }
 
 
 

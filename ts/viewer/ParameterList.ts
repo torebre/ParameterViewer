@@ -1,4 +1,4 @@
-import {Component, Input, Inject} from "angular2/core";
+import {Component, Input, Inject} from "@angular/core";
 import {Backend} from "../backend/Backend";
 import {ParameterInfo} from "../backend/ParameterInfo";
 

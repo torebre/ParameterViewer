@@ -2,9 +2,9 @@
  Draw parameter values inside a box defined by
  parameters given to the constructor.
  */
-import {Component, Input, Inject, ElementRef} from "angular2/core";
+import {Component, Input, Inject, ElementRef} from "@angular/core";
 import {IParameterTrackModel} from "../backend/IParameterTrackModel";
-import {NgFor} from "angular2/common";
+import {NgFor} from "@angular/common";
 import {PaintManager} from "./PaintManager";
 
 
@@ -47,6 +47,7 @@ export class ParameterTrack implements ParameterTrackModelListener {
     public setParameter(parameter:string):void {
         console.log("Parameter: " + parameter);
 
+        // TODO Just here for testing
         if ("Test2".match(parameter)) {
             console.log("Test10");
             this.width = "10cm";

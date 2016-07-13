@@ -6,7 +6,7 @@
  - of data values in a pixel.
  */
 import {IBackend} from "../backend/IBackend";
-import {Injectable, Inject} from "angular2/core";
+import {Injectable, Inject} from "@angular/core";
 import {Backend} from "../backend/Backend";
 
 

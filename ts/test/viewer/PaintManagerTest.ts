@@ -5,20 +5,6 @@ import {ParameterUpdateListener} from "../../backend/ParameterUpdateListener";
 
 
 
-import {
-    describe,
-    expect,
-    // fail,
-    it,
-beforeEach,
-    injectAsync,
-    TestComponentBuilder
-} from 'angular2/testing';
-
-
-
-
-
 class MockBackend implements IBackend {
     getBlockLength():number {
         return undefined;
