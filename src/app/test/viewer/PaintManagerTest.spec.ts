@@ -64,6 +64,7 @@ describe("PaintManager unit test", () => {
 
 
 it("Calculate SVG path", () => {
+  // TODO
 
 
 });

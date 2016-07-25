@@ -1,6 +1,7 @@
 import {Backend} from "../backend/Backend";
 import {Injectable} from "@angular/core";
 import {IBackend} from "../backend/IBackend";
+import {Observable} from "rxjs/Rx";
 
 
 @Injectable()
@@ -15,20 +16,13 @@ export class PaintManager {
 
 
 
-    repaint() {
 
-
-
-    }
-
-
-
-    getSvgPathForParameter(parameter:string):string {
+    getSvgPathForParameter(parameter:string):Observable<number[]> {
         // TODO Just here for testing
-        return "M50,50 A30,50 0 0,1 100,100";
+        // return "M50,50 A30,50 0 0,1 100,100";
 
+      return this.backend.getValues(1, 1, 0, 100);
     }
-
 
     // generateFullSvgPath(coordinates:Array<ValueSummary>):string {
     //     var svgPath = "M " + this.xOffset + " " + this.yOffset;

@@ -2,7 +2,7 @@
  Draw parameter values inside a box defined by
  parameters given to the constructor.
  */
-import {Component, Input, Inject} from "@angular/core";
+import {Component, Input, Inject, OnInit} from "@angular/core";
 import {IParameterTrackModel} from "../backend/IParameterTrackModel";
 import {PaintManager} from "./PaintManager";
 import {ValueSummary} from "./ValueSummary";
@@ -16,13 +16,15 @@ import {ValueSummary} from "./ValueSummary";
          [attr.width]="width"
         preserveAspectRatio="xMidYMid meet">
         <g style="stroke:#660000;">
-        <path [attr.d]="getPath()"/>
+        <path [attr.d]="path"/>
         </g>
         </svg>
     `
 })
-export class ParameterTrack {
+export class ParameterTrack implements OnInit {
     private colour:string = '#000000';
+
+// <path [attr.d]="getPath()"/>
 
     width:string = "5cm";
 
@@ -30,8 +32,12 @@ export class ParameterTrack {
 
   private height:number = 1000;
 
+  private path:string;
 
-    // @Inject(ElementRef) private elementRef:ElementRef;
+  private errorMessage:any;
+
+
+  // @Inject(ElementRef) private elementRef:ElementRef;
 
     // TODO Figure out exactly what the Input-annotation does
     @Input() parameter:string;
@@ -40,7 +46,6 @@ export class ParameterTrack {
     constructor(@Inject(PaintManager) private paintManager:PaintManager) {
 
         console.log("Paint manager: " +paintManager);
-
 
     }
 
@@ -59,8 +64,8 @@ export class ParameterTrack {
 
 
     private parameterTrackModel:IParameterTrackModel;
-    private xOffset:number;
-    private yOffset:number;
+    private xOffset:number = 0;
+    private yOffset:number = 0;
 
 
     addBoundingBox():void {
@@ -93,11 +98,15 @@ export class ParameterTrack {
     }
 
     render():void {
-        this.addBoundingBox();
-        var coordinates = this.parameterTrackModel.getParameterPath();
-        // var path:string = this.generateFullSvgPath(coordinates);
+      this.paintManager.getSvgPathForParameter(this.parameter).subscribe(
+        path => {
+          console.log("Got path: " +path);
 
-
+          this.path = this.generateFullSvgPath(path);
+          // this.addBoundingBox();
+          // var coordinates = this.parameterTrackModel.getParameterPath();
+        },
+        error => this.errorMessage = <any>error);
     }
 
     setHeight(newHeight:number) {
@@ -122,29 +131,62 @@ export class ParameterTrack {
       return 0;
     }
 
-    generateFullSvgPath(coordinates:Array<ValueSummary>):string {
-        var svgPath = "M " + this.xOffset + " " + this.yOffset;
-        var skipRows = 0;
-        var parameterRangeMin = this.parameterTrackModel.getMin();
-        var parameterRangeMax = this.parameterTrackModel.getMax();
+    private generateFullSvgPath(values:number[]) {
+          var svgPath = "M " + this.xOffset + " " + this.yOffset;
 
-        for (var row = 0; row < this.height; ++row) {
-            if (coordinates[row]) {
-                var scaledAverage = this.scaleValue(coordinates[row].average, parameterRangeMin, parameterRangeMax);
-                // TODO Use relative path instead?
-                svgPath += "L" + (this.xOffset + scaledAverage) + ', ' + (this.yOffset + row);
-                skipRows = 0;
-            } else {
-                skipRows++;
-            }
-        }
-        // console.log('SVG path: ' +svgPath);
-        return svgPath;
+
+      // TODO Just setup like this for testing
+
+      for(var index = 0; index < values.length; ++index) {
+        svgPath += "L" + (this.xOffset + values[index]) + ', ' + (this.yOffset + index);
+      }
+
+          // var skipRows = 0;
+          // var parameterRangeMin = this.parameterTrackModel.getMin();
+          // var parameterRangeMax = this.parameterTrackModel.getMax();
+          //
+          // for (var row = 0; row < this.height; ++row) {
+          //     if (coordinates[row]) {
+          //         var scaledAverage = this.scaleValue(coordinates[row].average, parameterRangeMin, parameterRangeMax);
+          //         // TODO Use relative path instead?
+          //         svgPath += "L" + (this.xOffset + scaledAverage) + ', ' + (this.yOffset + row);
+          //         skipRows = 0;
+          //     } else {
+          //         skipRows++;
+          //     }
+          // }
+          // console.log('SVG path: ' +svgPath);
+          return svgPath;
+
+
     }
 
-    getPath():string {
-        return this.paintManager.getSvgPathForParameter(this.parameter);
-        // return this.path;
-    }
+    // generateFullSvgPath(coordinates:Array<ValueSummary>):string {
+    //     var svgPath = "M " + this.xOffset + " " + this.yOffset;
+    //     var skipRows = 0;
+    //     var parameterRangeMin = this.parameterTrackModel.getMin();
+    //     var parameterRangeMax = this.parameterTrackModel.getMax();
+    //
+    //     for (var row = 0; row < this.height; ++row) {
+    //         if (coordinates[row]) {
+    //             var scaledAverage = this.scaleValue(coordinates[row].average, parameterRangeMin, parameterRangeMax);
+    //             // TODO Use relative path instead?
+    //             svgPath += "L" + (this.xOffset + scaledAverage) + ', ' + (this.yOffset + row);
+    //             skipRows = 0;
+    //         } else {
+    //             skipRows++;
+    //         }
+    //     }
+    //     // console.log('SVG path: ' +svgPath);
+    //     return svgPath;
+    // }
+
+
+  ngOnInit():any {
+    this.render();
+    return undefined;
+  }
+
+
 
 }

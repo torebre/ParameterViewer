@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {ParameterTable} from "./ParameterTable";
 import {ParameterList} from "./ParameterList";
 import {Backend} from "../backend/Backend"
@@ -17,12 +17,19 @@ import {DataModel} from "./DataModel";
     // TODO Can some of these providers be removed?
     providers: [Backend, PaintManager, DataModel]
 })
-export class ParameterViewer {
+export class ParameterViewer implements OnInit {
 
 
     constructor() {
 
     }
+
+
+  ngOnInit():any {
+    // TODO What should be done here?
+
+    return undefined;
+  }
 
 
 
