@@ -9,12 +9,6 @@ export class DummyBackend implements IBackend {
         return undefined;
     }
 
-    attachParameterUpdateCallback(parameterUpdateListener:ParameterUpdateListener):void {
-    }
-
-    removeParameterUpdateCallback(parameterUpdateListner:ParameterUpdateListener):void {
-    }
-
     getValue(parameter:number, start:number, stop:number):ValueSummary {
         return undefined;
     }

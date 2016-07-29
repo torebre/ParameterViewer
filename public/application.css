@@ -1,0 +1,26 @@
+svg {
+  width: auto;
+  height: 100%;
+}
+
+.parameterTrack {
+  border: red;
+  border-style: solid;
+}
+
+#parameter-view-table {
+  min-height: 100%;
+  height: 100%;
+}
+
+.fill {
+  min-height: 100%;
+  height: 100%;
+}
+
+.miniView {
+  background: lawngreen;
+  /*width: auto;*/
+  min-height: 100%;
+  height: 100%;
+}

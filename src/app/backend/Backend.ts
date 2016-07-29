@@ -2,7 +2,6 @@ import {IBackend} from "./IBackend";
 import {ParameterInfo} from "./ParameterInfo";
 import {Injectable, Inject} from "@angular/core";
 import {DummyBackend} from "./DummyBackend";
-import {ParameterUpdateListener} from "./ParameterUpdateListener";
 import {SocketHandler} from "./SocketHandler";
 import {APP_CONFIG, Config} from "../Config";
 import {ValueSummary} from "../viewer/ValueSummary";
@@ -73,18 +72,12 @@ export class Backend implements IBackend {
     return undefined;
   }
 
-  attachParameterUpdateCallback(parameterUpdateListener:ParameterUpdateListener):void {
-  }
-
-  removeParameterUpdateCallback(parameterUpdateListner:ParameterUpdateListener):void {
-  }
-
   getValues(logId:number, parameterId:number, start:number, stop:number):Observable<Array<number>> {
     let params:URLSearchParams = new URLSearchParams();
 
     // TODO Just here for testing
-    params.set('start', '0');
-    params.set('stop', '100');
+    params.set('start', start.toString());
+    params.set('stop', stop.toString());
 
     return this.http.get(this.config.REST_BASE_ENDPOINT + "/parameters/" + logId + "/" + parameterId + "/values",
       {
@@ -105,7 +98,7 @@ export class Backend implements IBackend {
 
       // TODO Just set up like this for testing
 
-      if(isNaN(parsedValue)) {
+      if (isNaN(parsedValue)) {
         result.push(0.0);
       }
       else {
@@ -125,5 +118,78 @@ export class Backend implements IBackend {
     return Observable.throw(errMsg);
   }
 
+
+  getValueSummary(logId:number, parameterId:number, rangesStart:number[], rangesStop:number[]):Observable<Array<number>> {
+    let params:URLSearchParams = new URLSearchParams();
+
+    var rangesCopy:number[] = [];
+    var numberRange:number[] = rangesStart.slice();
+
+    for (index in rangesStart) {
+      if (rangesStart[index] != -1) {
+        rangesCopy.push(rangesStart[index], rangesStop[index]);
+      }
+    }
+
+    // TODO Just here for testing
+    var index;
+
+    console.log("Ranges in request: " + rangesCopy);
+    for (index in rangesCopy) {
+      params.append('ranges', rangesCopy[index].toString());
+    }
+
+    return this.http.get(this.config.REST_BASE_ENDPOINT + "/parameters/" + logId + "/" + parameterId + "/valueSummary",
+      {
+        search: params
+      })
+      .map(result => {
+        var rangesSummary = this.extractDataSummary(result);
+        var counter:number = 0;
+        for (index in numberRange) {
+          if (numberRange[index] != -1) {
+            numberRange[index] = rangesSummary[counter++];
+          }
+          else {
+            numberRange[index] = NaN;
+          }
+          // else {
+          //   // TODO Use some other values
+          //   numberRange.push(-1);
+          // }
+        }
+        return numberRange;
+      })
+      .catch(this.handleError);
+  }
+
+  private extractDataSummary(res:Response):number[] {
+    let body = res.json();
+
+    var result:number[] = [];
+    var index;
+    for (index in body) {
+      var parsedValue = parseFloat(body[index].average);
+
+      // TODO Just set up like this for testing
+
+      if (isNaN(parsedValue)) {
+        result.push(0.0);
+      }
+      else {
+        result.push(parsedValue);
+      }
+    }
+    return result;
+  }
+
+  getIndexRange(logId:number):Observable<Array<number>> {
+    return this.http.get(this.config.REST_BASE_ENDPOINT + "/indexRange/" + logId)
+      .map(result => {
+        var body = result.json();
+        return [body.start, body.stop];
+      })
+      .catch(this.handleError);
+  }
 
 }

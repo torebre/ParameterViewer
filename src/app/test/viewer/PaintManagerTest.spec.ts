@@ -39,13 +39,6 @@ class MockBackend implements IBackend {
         return undefined;
     }
 
-    attachParameterUpdateCallback(parameterUpdateListener:ParameterUpdateListener):void {
-    }
-
-    removeParameterUpdateCallback(parameterUpdateListner:ParameterUpdateListener):void {
-    }
-
-
 }
 
 

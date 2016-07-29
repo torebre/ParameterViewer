@@ -23,13 +23,6 @@ export interface IBackend {
 // of index points
     getValue(parameter:number, start:number, stop:number):ValueSummary
 
-
     getParameters():Array<ParameterInfo>
-
-
-    attachParameterUpdateCallback(parameterUpdateListener:ParameterUpdateListener):void
-
-    removeParameterUpdateCallback(parameterUpdateListner:ParameterUpdateListener):void
-
 
 }

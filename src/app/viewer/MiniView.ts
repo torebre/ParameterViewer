@@ -1,43 +1,82 @@
-import {Component} from "@angular/core";
+import {Component, Inject, OnInit} from "@angular/core";
+import {PaintManager} from "./PaintManager";
 
 
 @Component({
-    selector: 'mini-view',
-    template: ''
+  selector: 'mini-view',
+  template: `
+<h2>Test20</h2>
+        <svg class="miniView" [attr.viewBox]="viewBox" preserveAspectRatio="none">
+           <rect x="0" [attr.y]="viewBoxStart" opacity="0.2" fill="blue" width = "20" [attr.height]="viewBoxHeight"
+           (mousedown)="onMouseDown($event)" (mouseup)="stopDragging()" (mousemove)="onMouseMove($event)" (mouseout)="stopDragging()"
+         (click)="onClicked()"/>          
+        </svg>
+    `
 })
-    class MiniView {
+export class MiniView implements OnInit {
 
-        constructor() {
-          //   var outline = paper.rect(0, 0, 100, 800);
-          // var miniViewWindow = paper.rect(0, 0, 100, 100);
+  // TODO Where should these come from?
+  fullHeight:number = 100;
 
-            //$(miniViewWindow.node).attr("class", "mediumBold");
-            //
-            //var dragging = false;
-            //
-            //miniViewWindow.drag(
-            //    function () {
-            //        console.log("Moving");
-            //        console.log("Event: " + event.movementY);
-            //        if (dragging && event.movementY != 0) {
-            //            // TODO Do not allow the user to drag the miniview outside the outline
-            //            // miniViewWindow.transform("t0," +event.movementY);
-            //            // miniViewWindow.translate(0, event.movementY);
-            //            console.log("miniViewWindow.x: " + miniViewWindow.y + ". event.movementY: " + event.movementY);
-            //            miniViewWindow.attr('y', miniViewWindow.attr('y') + event.movementY);
-            //        }
-            //    },
-            //    function () {
-            //        console.log("Starting");
-            //        dragging = true;
-            //    },
-            //    function () {
-            //        console.log("Stopping");
-            //        dragging = false;
-            //    }
-            //)
+  viewBox:string = "0 0 20 100";
+
+  viewBoxStart:number = 0;
+  viewBoxHeight:number = 10;
+
+  private initialRangeFactor = 0.1;
+
+  dragStart:number = 0;
+
+  mouseButtonDown:boolean = false;
 
 
-        }
+  constructor(@Inject(PaintManager) private paintManager:PaintManager) {
 
+  }
+
+
+  ngOnInit():any {
+    return undefined;
+  }
+
+
+  onClicked() {
+
+  }
+
+  onMouseDown(event:MouseEvent) {
+    this.dragStart = event.clientX;
+    this.mouseButtonDown = true;
+  }
+
+  stopDragging() {
+    this.mouseButtonDown = false;
+  }
+
+  onMouseMove(event:MouseEvent) {
+    if (this.mouseButtonDown) {
+      var newStart:number = event.movementY + this.viewBoxStart;
+
+      console.log("New start: " +newStart);
+
+      if(newStart + this.viewBoxHeight > this.fullHeight) {
+        newStart = this.fullHeight - this.viewBoxHeight;
+      }
+      else if(newStart < 0) {
+        newStart = 0;
+      }
+      if(this.viewBoxStart != newStart) {
+        this.viewBoxStart = newStart;
+        // TODO The range is not the same as the box height
+        this.paintManager.visibleRangeChanged(this.transformToIndexRange(this.viewBoxStart),
+          Math.floor((this.paintManager.maxIndex - this.paintManager.minIndex) * this.initialRangeFactor));
+      }
     }
+  }
+
+  private transformToIndexRange(scrollIndex:number):number {
+    return Math.floor((scrollIndex / 100) * (this.paintManager.maxIndex - this.paintManager.minIndex)
+      + this.paintManager.minIndex);
+  }
+
+}

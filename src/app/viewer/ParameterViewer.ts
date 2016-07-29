@@ -4,6 +4,7 @@ import {ParameterList} from "./ParameterList";
 import {Backend} from "../backend/Backend"
 import {PaintManager} from "./PaintManager";
 import {DataModel} from "./DataModel";
+import {MiniView} from "./MiniView";
 
 
 /**
@@ -13,7 +14,7 @@ import {DataModel} from "./DataModel";
 @Component({
     selector: "parameter-viewer",
     templateUrl: "app/templates/parameterViewer.html",
-    directives: [ParameterTable, ParameterList],
+    directives: [ParameterTable, ParameterList, MiniView],
     // TODO Can some of these providers be removed?
     providers: [Backend, PaintManager, DataModel]
 })
