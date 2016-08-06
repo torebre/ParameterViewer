@@ -10,7 +10,6 @@ import {ParameterUpdate} from "./ParameterUpdate";
  */
 @Injectable()
 export class PaintManager {
-
   minIndexShowing:number = 0;
   maxIndexShowing:number = 0;
 
@@ -29,13 +28,15 @@ export class PaintManager {
   maxIndex:number = 0;
   minIndex:number = 0;
 
+  private zoomFactor:number = 0.1;
+  private static zoomStep:number = 0.1;
+
   private parameterUpdates:Subject<ParameterUpdate>;
 
 
   constructor(private backend:Backend) {
     this.parameterUpdates = new Subject<ParameterUpdate[]>();
     this.setup();
-
   }
 
 
@@ -133,6 +134,7 @@ export class PaintManager {
   }
 
   render():void {
+    // TODO Get from real parameter
     this.getSvgPathForParameter("Test").subscribe(
       path => {
         // console.log("Got path: " + path);
@@ -150,6 +152,26 @@ export class PaintManager {
 
   getParameterUpdates():Observable<ParameterUpdate> {
     return this.parameterUpdates.asObservable();
+  }
+
+  zoomOut() {
+    if(this.zoomFactor >= 1.0) {
+      return;
+    }
+    this.zoomFactor += PaintManager.zoomStep;
+    this.parameterUpdates.next(new ParameterUpdate());
+  }
+
+  zoomIn() {
+    if(this.zoomFactor <= 0.1) {
+      return;
+    }
+    this.zoomFactor -= PaintManager.zoomStep;
+    this.parameterUpdates.next(new ParameterUpdate());
+  }
+
+  getZoomFactor():number {
+    return this.zoomFactor;
   }
 
 }

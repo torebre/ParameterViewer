@@ -4,7 +4,6 @@ import {ValueSummary} from "./ValueSummary";
 
 
 export class ParameterTrackModel implements IParameterTrackModel {
-    private listeners:ParameterTrackModelListener[];
 
     constructor(private parameter:number, private dataModel:DataModel) {
         this.dataModel = dataModel;
@@ -57,8 +56,5 @@ export class ParameterTrackModel implements IParameterTrackModel {
         // TODO Implement method
     }
 
-    addListener(parameterTrack:ParameterTrackModelListener):void {
-        this.listeners.push(parameterTrack);
-    }
 
 }

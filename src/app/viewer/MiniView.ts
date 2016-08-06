@@ -8,8 +8,7 @@ import {PaintManager} from "./PaintManager";
 <h2>Test20</h2>
         <svg class="miniView" [attr.viewBox]="viewBox" preserveAspectRatio="none">
            <rect x="0" [attr.y]="viewBoxStart" opacity="0.2" fill="blue" width = "20" [attr.height]="viewBoxHeight"
-           (mousedown)="onMouseDown($event)" (mouseup)="stopDragging()" (mousemove)="onMouseMove($event)" (mouseout)="stopDragging()"
-         (click)="onClicked()"/>          
+           (mousedown)="onMouseDown($event)" (mouseup)="stopDragging()" (mousemove)="onMouseMove($event)" (mouseout)="stopDragging()"/>          
         </svg>
     `
 })
@@ -21,9 +20,9 @@ export class MiniView implements OnInit {
   viewBox:string = "0 0 20 100";
 
   viewBoxStart:number = 0;
-  viewBoxHeight:number = 10;
+  viewBoxHeight:number;
 
-  private initialRangeFactor = 0.1;
+  private initialRangeFactor:number;
 
   dragStart:number = 0;
 
@@ -35,13 +34,11 @@ export class MiniView implements OnInit {
   }
 
 
-  ngOnInit():any {
-    return undefined;
-  }
-
-
-  onClicked() {
-
+  ngOnInit() {
+      this.paintManager.getParameterUpdates().subscribe(input => {
+        this.initialRangeFactor = this.paintManager.getZoomFactor();
+        this.viewBoxHeight = this.initialRangeFactor * this.fullHeight;
+      });
   }
 
   onMouseDown(event:MouseEvent) {

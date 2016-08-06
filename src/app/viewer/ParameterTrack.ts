@@ -145,13 +145,12 @@ export class ParameterTrack implements OnInit {
 
   }
 
-  ngOnInit():any {
+  ngOnInit() {
     this.paintManager.getParameterUpdates().subscribe(input => {
       console.log("Got parameter update");
       this.path = this.generateFullSvgPath(this.paintManager.getPath());
       // this.path = this.paintManager.getPath();
     });
-    return undefined;
   }
 
   getPath():string {
