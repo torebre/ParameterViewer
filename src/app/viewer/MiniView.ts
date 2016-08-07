@@ -5,16 +5,14 @@ import {PaintManager} from "./PaintManager";
 @Component({
   selector: 'mini-view',
   template: `
-<h2>Test20</h2>
         <svg class="miniView" [attr.viewBox]="viewBox" preserveAspectRatio="none">
            <rect x="0" [attr.y]="viewBoxStart" opacity="0.2" fill="blue" width = "20" [attr.height]="viewBoxHeight"
-           (mousedown)="onMouseDown($event)" (mouseup)="stopDragging()" (mousemove)="onMouseMove($event)" (mouseout)="stopDragging()"/>          
+           (mousedown)="onMouseDown($event)" (mouseup)="stopDragging()" (mousemove)="onMouseMove($event)" 
+           (mouseout)="stopDragging()"/>          
         </svg>
     `
 })
 export class MiniView implements OnInit {
-
-  // TODO Where should these come from?
   fullHeight:number = 100;
 
   viewBox:string = "0 0 20 100";
@@ -32,7 +30,6 @@ export class MiniView implements OnInit {
   constructor(@Inject(PaintManager) private paintManager:PaintManager) {
 
   }
-
 
   ngOnInit() {
       this.paintManager.getParameterUpdates().subscribe(input => {
@@ -64,9 +61,7 @@ export class MiniView implements OnInit {
       }
       if(this.viewBoxStart != newStart) {
         this.viewBoxStart = newStart;
-        // TODO The range is not the same as the box height
-        this.paintManager.visibleRangeChanged(this.transformToIndexRange(this.viewBoxStart),
-          Math.floor((this.paintManager.maxIndex - this.paintManager.minIndex) * this.initialRangeFactor));
+        this.paintManager.visibleRangeChanged(this.transformToIndexRange(this.viewBoxStart));
       }
     }
   }

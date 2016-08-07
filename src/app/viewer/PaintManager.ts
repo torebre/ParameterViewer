@@ -122,14 +122,13 @@ export class PaintManager {
     console.log("Ranges start: " +this.rangesStart);
   }
 
-  visibleRangeChanged(start:number, range:number) {
+  visibleRangeChanged(start:number) {
     this.minIndexShowing = start;
-    this.maxIndexShowing = start + range;
+    this.maxIndexShowing = start + Math.floor((this.maxIndex - this.minIndex) * this.zoomFactor);
 
     console.log("Start: " + this.minIndexShowing + ". Stop: " + this.maxIndexShowing);
 
     this.calculateVisiblePoints();
-
     this.render();
   }
 
@@ -159,7 +158,7 @@ export class PaintManager {
       return;
     }
     this.zoomFactor += PaintManager.zoomStep;
-    this.parameterUpdates.next(new ParameterUpdate());
+    this.visibleRangeChanged(this.minIndexShowing);
   }
 
   zoomIn() {
@@ -167,7 +166,7 @@ export class PaintManager {
       return;
     }
     this.zoomFactor -= PaintManager.zoomStep;
-    this.parameterUpdates.next(new ParameterUpdate());
+    this.visibleRangeChanged(this.minIndexShowing);
   }
 
   getZoomFactor():number {
