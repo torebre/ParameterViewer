@@ -5,7 +5,6 @@
 import {Component, Input, Inject, OnInit} from "@angular/core";
 import {IParameterTrackModel} from "../backend/IParameterTrackModel";
 import {PaintManager} from "./PaintManager";
-import {ValueSummary} from "./ValueSummary";
 
 
 @Component({
@@ -14,31 +13,26 @@ import {ValueSummary} from "./ValueSummary";
 <div class="parameterTrack">
         <svg [attr.viewBox]="viewBox"
         preserveAspectRatio="none">
-        <path [attr.d]="getPath()" [attr.stroke]="colour" stroke-width="1" fill="none"/>
+        <path [attr.d]="getPath()" [attr.stroke]="colour" stroke-width="0.5" fill="transparent"/>
+        <path [attr.d]="getPath()" stroke="transparent" stroke-width="10" fill="transparent" 
+        (mouseover)="onMouseOver($event)" (mouseout)="onMouseOut()" (mousemove)="onMouseOver($event)"/>
+        <circle *ngIf="getDrawMarker()" [attr.cx]="markerX" [attr.cy]="markerY" r="3" fill="red"/>
         </svg>
         </div>
     `
 })
 export class ParameterTrack implements OnInit {
   private colour:string = '#0000FF';
-
-  // [attr.width]="width"
-// <g style="stroke:#660000;">
-
-  // width:string = "5cm";
-
-  // preserveAspectRatio="xMidYMid meet">
-
   private widthNumber:number = 5;
   private min:number = -1;
   private max:number = 1;
-
 
   viewBox:string = "0 0 20 100";
 
   private height:number = 1000;
 
   private path:string;
+  private values:number[];
 
   private errorMessage:any;
 
@@ -46,7 +40,9 @@ export class ParameterTrack implements OnInit {
   private xOffset:number = 0;
   private yOffset:number = 0;
 
-
+  private drawMarker:boolean = false;
+  markerX:number;
+  markerY:number;
 
   // @Inject(ElementRef) private elementRef:ElementRef;
 
@@ -148,13 +144,29 @@ export class ParameterTrack implements OnInit {
   ngOnInit() {
     this.paintManager.getParameterUpdates().subscribe(input => {
       console.log("Got parameter update");
-      this.path = this.generateFullSvgPath(this.paintManager.getPath());
-      // this.path = this.paintManager.getPath();
+      this.values = this.paintManager.getPath();
+      this.path = this.generateFullSvgPath(this.values);
     });
   }
 
   getPath():string {
     return this.path;
+  }
+
+  onMouseOver(event:MouseEvent) {
+    this.markerY = event.offsetY;
+    this.markerX = this.scaleValue(this.values[this.markerY], this.min, this.max);
+    this.drawMarker = true;
+  }
+
+  onMouseOut() {
+    this.drawMarker = false;
+  }
+
+  getDrawMarker():boolean {
+    console.log("Test20: " +this.drawMarker +", " +this.markerX +", " +this.markerY);
+
+    return this.drawMarker;
   }
 
 }
